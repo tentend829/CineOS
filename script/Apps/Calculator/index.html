@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
+.calc{width:100%;max-width:400px;padding:20px}
+#disp{width:100%;background:#0a0a0a;border:1px solid #333;border-radius:14px;padding:20px;text-align:right;font-size:2.2rem;font-weight:300;margin-bottom:16px;min-height:80px;word-break:break-all;color:#fff}
+#sub{font-size:1rem;color:#666;min-height:24px}
+.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+button{padding:18px;font-size:1.3rem;border:1px solid #333;border-radius:12px;background:#111;color:#fff;cursor:pointer;transition:.15s}
+button:hover{background:#222;border-color:#fff}
+button:active{transform:scale(.95)}
+.op{color:#ff8c00;border-color:#444}
+.eq{background:#ff8c00;color:#000;border-color:#ff8c00}
+.eq:hover{background:#ffa500}
+.clr{color:#ff4444}
+</style>
+</head>
+<body>
+<div class="calc">
+<div id="sub"></div>
+<div id="disp">0</div>
+<div class="btns">
+<button class="clr" onclick="c()">C</button><button onclick="inp('(')">(</button><button onclick="inp(')')">)</button><button class="op" onclick="inp('/')">÷</button>
+<button onclick="inp('7')">7</button><button onclick="inp('8')">8</button><button onclick="inp('9')">9</button><button class="op" onclick="inp('*')">×</button>
+<button onclick="inp('4')">4</button><button onclick="inp('5')">5</button><button onclick="inp('6')">6</button><button class="op" onclick="inp('-')">−</button>
+<button onclick="inp('1')">1</button><button onclick="inp('2')">2</button><button onclick="inp('3')">3</button><button class="op" onclick="inp('+')">+</button>
+<button onclick="inp('0')">0</button><button onclick="inp('.')">.</button><button onclick="inp('%')">%</button><button class="eq" onclick="calc()">=</button>
+</div>
+</div>
+<script>
+var d=document.getElementById('disp');
+var s=document.getElementById('sub');
+function inp(v){if(d.textContent==='0'&&v!=='.'&&v!==')')d.textContent=v;else d.textContent+=v}
+function c(){d.textContent='0';s.textContent=''}
+function calc(){try{s.textContent=d.textContent;var r=eval(d.textContent.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-'));d.textContent=Number.isFinite(r)?r:'Error'}catch(e){d.textContent='Error'}}
+</script>
+</body>
+</html>

@@ -2,21 +2,30 @@ var _SYSTEM_PATHS = ["C:/Windows/System32/kernel32.dll", "/var/www/html/dante-os
 var _devBuildVer = "3.0.1";
 
 var APPS = {
-    'cine': {title: 'DANTE // HUB', path: 'script/Apps/Cine/index.html', icon: 'https://cdn.worldvectorlogo.com/logos/netflix-logo-icon.svg', pinned: true},
-    'term': {title: 'Spotify', path: 'script/Apps/Spotify/index.html', icon: 'https://cdn.pixabay.com/photo/2016/10/22/00/15/spotify-1759471_1280.jpg', pinned: true},
-    'files': {title: 'PS5 Emu', path: 'script/Apps/Ps5/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-OeL_be7RFaoHi3PswkuAR5XcMgBNRDynsg&s', pinned: true},
-    'web': {title: 'DanTe-Web', path: 'script/Apps/Web/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeD89ZcX5W1FBtal7RerasT27q-OmZqnBixQ&s', pinned: true},
-    'settings': {title: 'CONFIG', internal: true, icon: 'https://cdn.iconscout.com/icon/free/png-256/free-apple-settings-icon-svg-download-png-493162.png', pinned: true},
-    'discord': {title: 'Discord', path: 'script/Apps/Discord/index.html', icon: 'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png', pinned: false},
-    'roblox': {title: 'Roblox', path: 'script/Apps/Roblox/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9KvNyFWMg_bjo_q_1IVLKFWbfCeonn2qDow&s', pinned: false},
-    'android': {title: 'Android', path: 'script/Apps/Android/index.html', icon: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/android-icon.png', pinned: false},
-    'ciniai': {title: 'Cini AI', path: 'script/Apps/Cini/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkLXhvns5Rrdf-XBNlWcPIRh0hlJfWnEtBWg&s', pinned: false},
-    'VM': {title: 'Windows Virtual-Machine', path: 'script/Apps/VM/index.html', icon: 'https://static1.squarespace.com/static/68e69c83884dc82cc035a923/69454e29c6db7516b2566fca/69454e32c6db7516b256749a/1766149682532/Virtualbox_logo.png?format=original', pinned: false},
-    'crunchyroll': {title: 'CrunchyRoll', path: 'script/Apps/Crunchy/index.html', icon: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a0a4547a-06c5-4740-b87a-ca9c4fa0171e/dduaesk-2b3e85d2-3116-4eb5-8260-f413d1fc670e.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hMGE0NTQ3YS0wNmM1LTQ3NDAtYjg3YS1jYTljNGZhMDE3MWUvZGR1YWVzay0yYjNlODVkMi0zMTE2LTRlYjUtODI2MC1mNDEzZDFmYzY3MGUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vReffTSSKpde4w8EwFxz_CttxlLay8fXOq0goYh6rsg', pinned: false},
-    'Geforce': {title: 'GEFORCE NOW', path: 'script/Apps/Geforce/index.html', icon: 'https://play-lh.googleusercontent.com/_-b_HQXrVyyhZSHj_BoE9u_-cxkcHDH_yLX5rDjJsFMIfsCNQs9F3QP4JvEFcWaSIz0=w240-h480-rw', pinned: false},
-    'Fortnite': {title: 'Fortnite', path: 'script/Apps/Fortnite/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShiXrQ-cvZeDyQNPIZCv_hsaUCAe5j_rXJ7Q&s', pinned: false},
-    'RocketL': {title: 'Rocket League', path: 'script/Apps/RocketL/index.html', icon: 'https://ygo-assets-entities-us.yougov.net/87bb7a16-2b62-11e8-82b1-37bb0d207ced.jpg?zcw=518&zch=518&zct=10&zcl=0', pinned: false},
-    'Xbox': {title: 'Xbox', path: 'script/Apps/Xbox/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRknRQh-WRK4F75YB3EAlfrsqAk66Xjn45sBg&s', pinned: false},
+    'cine': {title: 'DANTE // HUB', path: 'script/Apps/Cine/index.html', icon: 'https://cdn.worldvectorlogo.com/logos/netflix-logo-icon.svg', pinned: true, cat: 'Media'},
+    'term': {title: 'Spotify', path: 'script/Apps/Spotify/index.html', icon: 'https://cdn.pixabay.com/photo/2016/10/22/00/15/spotify-1759471_1280.jpg', pinned: true, cat: 'Media'},
+    'settings': {title: 'CONFIG', internal: true, icon: 'https://cdn.iconscout.com/icon/free/png-256/free-apple-settings-icon-svg-download-png-493162.png', pinned: true, cat: 'System'},
+    'files': {title: 'PS5 Emu', path: 'script/Apps/Ps5/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-OeL_be7RFaoHi3PswkuAR5XcMgBNRDynsg&s', pinned: true, cat: 'Gaming'},
+    'web': {title: 'DanTe-Web', path: 'script/Apps/Web/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeD89ZcX5W1FBtal7RerasT27q-OmZqnBixQ&s', pinned: true, cat: 'Tools'},
+    'discord': {title: 'Discord', path: 'script/Apps/Discord/index.html', icon: 'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png', pinned: false, cat: 'Social'},
+    'roblox': {title: 'Roblox', path: 'script/Apps/Roblox/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9KvNyFWMg_bjo_q_1IVLKFWbfCeonn2qDow&s', pinned: false, cat: 'Gaming'},
+    'android': {title: 'Android', path: 'script/Apps/Android/index.html', icon: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/android-icon.png', pinned: false, cat: 'Tools'},
+    'ciniai': {title: 'Cini AI', path: 'script/Apps/Cini/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkLXhvns5Rrdf-XBNlWcPIRh0hlJfWnEtBWg&s', pinned: false, cat: 'Tools'},
+    'VM': {title: 'Windows Virtual-Machine', path: 'script/Apps/VM/index.html', icon: 'https://static1.squarespace.com/static/68e69c83884dc82cc035a923/69454e29c6db7516b2566fca/69454e32c6db7516b256749a/1766149682532/Virtualbox_logo.png?format=original', pinned: false, cat: 'Tools'},
+    'crunchyroll': {title: 'CrunchyRoll', path: 'script/Apps/Crunchy/index.html', icon: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a0a4547a-06c5-4740-b87a-ca9c4fa0171e/dduaesk-2b3e85d2-3116-4eb5-8260-f413d1fc670e.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hMGE0NTQ3YS0wNmM1LTQ3NDAtYjg3YS1jYTljNGZhMDE3MWUvZGR1YWVzay0yYjNlODVkMi0zMTE2LTRlYjUtODI2MC1mNDEzZDFmYzY3MGUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.vReffTSSKpde4w8EwFxz_CttxlLay8fXOq0goYh6rsg', pinned: false, cat: 'Media'},
+    'Geforce': {title: 'GEFORCE NOW', path: 'script/Apps/Geforce/index.html', icon: 'https://play-lh.googleusercontent.com/_-b_HQXrVyyhZSHj_BoE9u_-cxkcHDH_yLX5rDjJsFMIfsCNQs9F3QP4JvEFcWaSIz0=w240-h480-rw', pinned: false, cat: 'Gaming'},
+    'Fortnite': {title: 'Fortnite', path: 'script/Apps/Fortnite/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShiXrQ-cvZeDyQNPIZCv_hsaUCAe5j_rXJ7Q&s', pinned: false, cat: 'Gaming'},
+    'RocketL': {title: 'Rocket League', path: 'script/Apps/RocketL/index.html', icon: 'https://ygo-assets-entities-us.yougov.net/87bb7a16-2b62-11e8-82b1-37bb0d207ced.jpg?zcw=518&zch=518&zct=10&zcl=0', pinned: false, cat: 'Gaming'},
+    'Xbox': {title: 'Xbox', path: 'script/Apps/Xbox/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRknRQh-WRK4F75YB3EAlfrsqAk66Xjn45sBg&s', pinned: false, cat: 'Gaming'},
+    'calculator': {title: 'Calculator', path: 'script/Apps/Calculator/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/234/234530.png', pinned: false, cat: 'Tools'},
+    'notes': {title: 'Notizen', path: 'script/Apps/Notes/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2991/2991234.png', pinned: false, cat: 'Tools'},
+    'stopwatch': {title: 'Stopwatch', path: 'script/Apps/Stopwatch/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2088/2088617.png', pinned: false, cat: 'Tools'},
+    'pomodoro': {title: 'Pomodoro', path: 'script/Apps/Pomodoro/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/3014/3014046.png', pinned: false, cat: 'Tools'},
+    'weatherapp': {title: 'Wetter', path: 'script/Apps/WeatherApp/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/1163/1163661.png', pinned: false, cat: 'Tools'},
+    'qrcode': {title: 'QR-Code', path: 'script/Apps/QRCode/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/1341/1341624.png', pinned: false, cat: 'Tools'},
+    'snake': {title: 'Snake', path: 'script/Apps/Snake/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2721/2721287.png', pinned: false, cat: 'Spiele'},
+    'countdown': {title: 'Countdown', path: 'script/Apps/Countdown/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2088/2088617.png', pinned: false, cat: 'Tools'},
+    'terminal': {title: 'Terminal', path: 'script/Apps/Terminal/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png', pinned: false, cat: 'Tools'},
 };
 
 var savedPins = localStorage.getItem('c_pins_v2');
@@ -58,7 +67,14 @@ var wallpaperRegistry = {
     "Gojo": {id: "Gojo", name: "Gojo", url: "Videos/Gojo.mp4", locked: false},
     "BlackHole": {id: "BlackHole", name: "Black Hole", url: "Videos/BlackHole.mp4", locked: false},
     "Yuta": {id: "Yuta", name: "Yuta", url: "Videos/Yuta.mp4", locked: false},
-    "Desktop": {id: "Desktop", name: "Desktop Lines", url: "Videos/Desktop.mp4", locked: false}
+    "Desktop": {id: "Desktop", name: "Desktop Lines", url: "Videos/Desktop.mp4", locked: false},
+    "Monday": {id: "Monday", name: "Monday", url: "Videos/Monday.png", locked: false},
+    "Tuesday": {id: "Tuesday", name: "Tuesday", url: "Videos/Tuesday.png", locked: false},
+    "Wednesday": {id: "Wednesday", name: "Wednesday", url: "Videos/Wednesday.png", locked: false},
+    "Thursday": {id: "Thursday", name: "Thursday", url: "Videos/Thursday.png", locked: false},
+    "Friday": {id: "Friday", name: "Friday", url: "Videos/Friday.png", locked: false},
+    "Saturday": {id: "Saturday", name: "Saturday", url: "Videos/Saturday.png", locked: false},
+    "Sunday": {id: "Sunday", name: "Sunday", url: "Videos/Sunday.png", locked: false}
 };
 
 var sysConfig = JSON.parse(localStorage.getItem('cine_sys_config')) || {};
@@ -71,12 +87,33 @@ if(!sysConfig.panicKey) sysConfig.panicKey = '`';
 if(!sysConfig.homeWallpaper) sysConfig.homeWallpaper = 'Default';
 if(!sysConfig.lockWallpaper) sysConfig.lockWallpaper = 'green';
 if(!sysConfig.cloak) sysConfig.cloak = 'none';
+if(!sysConfig.theme) sysConfig.theme = 'default';
 
 window.updateSysSetting = function(key, value) {
     sysConfig[key] = value;
     localStorage.setItem('cine_sys_config', JSON.stringify(sysConfig));
     if(key === 'optBg') applySystemSettings();
     if(key === 'wpLoop') updateWallpaperLoop();
+    if(key === 'theme') setTheme(value);
+};
+
+var themes = {
+    default: {name:'Standard', accent:'#fff', bg:'#000', glass:'rgba(20,20,20,0.6)', border:'#333'},
+    blue: {name:'Blau', accent:'#4dabf7', bg:'#050a14', glass:'rgba(20,40,80,0.6)', border:'#2a4a7a'},
+    green: {name:'Grün', accent:'#51cf66', bg:'#051406', glass:'rgba(20,60,30,0.6)', border:'#2a6a3a'},
+    purple: {name:'Lila', accent:'#cc5de8', bg:'#120514', glass:'rgba(50,20,60,0.6)', border:'#5a2a7a'},
+    orange: {name:'Orange', accent:'#ff922b', bg:'#140a05', glass:'rgba(80,40,10,0.6)', border:'#7a4a2a'}
+};
+
+window.setTheme = function(key) {
+    var t = themes[key] || themes.default;
+    var r = document.documentElement;
+    r.style.setProperty('--accent-main', t.accent);
+    r.style.setProperty('--bg-page', t.bg);
+    r.style.setProperty('--glass-bg', t.glass);
+    r.style.setProperty('--glass-border', t.border);
+    r.style.setProperty('--dark-gray', t.bg);
+    localStorage.setItem('dante_theme', key);
 };
 
 var cloaks = {
@@ -158,6 +195,8 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('boot-layer').style.display = 'block';
     loadDesktop();
     updateSidebarData();
+    fetchWeather();
+    setTheme(sysConfig.theme);
 });
 
 function renderUI() {
@@ -174,7 +213,7 @@ function renderUI() {
         }
     }
     
-    dock.innerHTML = dHTML;
+    dock.innerHTML = dHTML + '<div style="flex:1"></div><div id="dock-clock" style="color:#888;font-size:12px;font-weight:600;letter-spacing:1px;padding:0 10px;white-space:nowrap;font-family:var(--font-main)"></div>';
     pGrid.innerHTML = pHTML;
     populateDrawer();
 }
@@ -369,6 +408,16 @@ function updateClock() {
     if(hDay) hDay.innerText = dName;
     if(lDat) lDat.innerText = dNum + ' ' + mArr[n.getMonth()] + ', ' + yr + '.';
     if(lTim) lTim.innerText = '- ' + hrs + ':' + min + ' -';
+
+    var dc = document.getElementById('dock-clock');
+    if(dc) dc.innerText = hrs + ':' + min;
+
+    var dayName = dName.charAt(0) + dName.slice(1).toLowerCase();
+    var dayEntry = wallpaperRegistry[dayName];
+    var lockImg = document.getElementById('lock-img');
+    if(lockImg && dayEntry && lockImg.src.indexOf(dayEntry.url) === -1) {
+        lockImg.src = dayEntry.url;
+    }
 }
 setInterval(updateClock, 1000);
 
@@ -402,6 +451,38 @@ window.openUpdateLog = function() {
     else if(u) u.style.display = 'flex';
 };
 
+function fetchWeather() {
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=51.1657&longitude=10.4515&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+            var c = d.current;
+            if(!c) return;
+            var temp = Math.round(c.temperature_2m) + '°C';
+            var feel = Math.round(c.apparent_temperature) + '°C';
+            var humidity = c.relative_humidity_2m + '%';
+            var wind = Math.round(c.wind_speed_10m) + ' km/h';
+
+            var codes = {
+                0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',
+                51:'🌦️',53:'🌦️',55:'🌦️',56:'🌧️',57:'🌧️',
+                61:'🌧️',63:'🌧️',65:'🌧️',66:'🌧️',67:'🌧️',
+                71:'❄️',73:'❄️',75:'❄️',77:'❄️',
+                80:'🌦️',81:'🌦️',82:'🌦️',85:'❄️',86:'❄️',
+                95:'⛈️',96:'⛈️',99:'⛈️'
+            };
+            var icon = codes[c.weather_code] || '🌡️';
+
+            document.getElementById('weather-icon').textContent = icon;
+            document.getElementById('weather-temp').textContent = temp + ' (gefühlt ' + feel + ')';
+            document.getElementById('weather-desc').textContent = 'Aktuelles Wetter';
+            document.getElementById('weather-humidity').textContent = '💧 ' + humidity;
+            document.getElementById('weather-wind').textContent = '💨 ' + wind;
+        })
+        .catch(function() {
+            document.getElementById('weather-desc').textContent = 'Nicht verfügbar';
+        });
+}
+
 function updateSidebarData() {
     try {
         let ps = JSON.parse(localStorage.getItem('ps_purchased'));
@@ -417,36 +498,66 @@ function updateSidebarData() {
     } catch(e) {}
 }
 setInterval(updateSidebarData, 5000);
+setInterval(fetchWeather, 600000);
 
 function populateDrawer() {
     let g = document.getElementById('drawer-grid');
     g.innerHTML = '';
+    var cats = {};
     for(let key in APPS) {
         let a = APPS[key];
-        let d = document.createElement('div');
-        d.className = 'drawer-item';
-        d.dataset.id = key;
-        d.innerHTML = '<img src="' + a.icon + '" style="pointer-events:none;"><span>' + a.title + '</span>';
-        
-        d.onmousedown = function(e) { DragSystem.start(e, this, 'drawer', this.dataset.id); };
-        d.onclick = function(e) {
-            if(!DragSystem.isDragMove) {
-                toggleApp(this.dataset.id);
-                toggleAppDrawer();
-            }
-        };
-        d.oncontextmenu = function(e) { openDrawerCtx(e, this.dataset.id); }
-        g.appendChild(d);
+        let c = a.cat || 'Sonstiges';
+        if(!cats[c]) cats[c] = [];
+        cats[c].push(key);
     }
+    var order = ['Gaming','Media','Tools','System','Social','Spiele','Sonstiges'];
+    order.forEach(function(c) {
+        if(!cats[c]) return;
+        var h = document.createElement('div');
+        h.className = 'drawer-cat-header';
+        h.textContent = c;
+        g.appendChild(h);
+        cats[c].forEach(function(key) {
+            let a = APPS[key];
+            let d = document.createElement('div');
+            d.className = 'drawer-item';
+            d.dataset.id = key;
+            d.dataset.cat = c;
+            d.innerHTML = '<img src="' + a.icon + '" style="pointer-events:none;"><span>' + a.title + '</span>';
+            d.onmousedown = function(e) { DragSystem.start(e, this, 'drawer', this.dataset.id); };
+            d.onclick = function(e) {
+                if(!DragSystem.isDragMove) {
+                    toggleApp(this.dataset.id);
+                    toggleAppDrawer();
+                }
+            };
+            d.oncontextmenu = function(e) { openDrawerCtx(e, this.dataset.id); }
+            g.appendChild(d);
+        });
+    });
 }
 
 function filterDrawer(val) {
-    let items = document.querySelectorAll('.drawer-item');
+    let items = document.querySelectorAll('.drawer-item, .drawer-cat-header');
     let q = val.toLowerCase();
+    var activeCats = {};
     for(let i=0; i<items.length; i++) {
-        let txt = items[i].innerText.toLowerCase();
-        if(txt.includes(q)) items[i].style.display = 'flex';
-        else items[i].style.display = 'none';
+        if(items[i].classList.contains('drawer-cat-header')) {
+            items[i].style.display = q ? 'none' : 'block';
+        } else {
+            let txt = items[i].innerText.toLowerCase();
+            if(txt.includes(q)) {
+                items[i].style.display = 'flex';
+                activeCats[items[i].dataset.cat] = true;
+            } else {
+                items[i].style.display = 'none';
+            }
+        }
+    }
+    if(q) {
+        document.querySelectorAll('.drawer-cat-header').forEach(function(h) {
+            if(activeCats[h.textContent]) h.style.display = 'block';
+        });
     }
 }
 
@@ -501,9 +612,41 @@ function openWindow(id) {
         
         let iframeStr = dat.internal ? '<iframe id="frame-' + id + '"></iframe>' : '<iframe id="frame-' + id + '" src="' + dat.path + '"></iframe>';
         
-        win.innerHTML = '<div class="win-header" onmousedown="DragSystem.startWinDrag(event, \'' + id + '\')"><div class="win-title">' + dat.title + '</div><div class="win-controls"><div class="win-btn btn-min" onclick="minimizeWindow(\'' + id + '\')"></div><div class="win-btn btn-close" onclick="closeWindow(\'' + id + '\')"></div></div></div><div class="win-body">' + iframeStr + '</div>';
+        var spinnerHtml = '<div id="loader-' + id + '" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:5;pointer-events:none"><div style="width:24px;height:24px;border:3px solid #333;border-top-color:#fff;border-radius:50%;animation:spin .8s cubic-bezier(.4,0,.2,1) infinite"></div></div>';
+        
+        win.innerHTML = '<div class="win-header" onmousedown="DragSystem.startWinDrag(event, \'' + id + '\')"><div class="win-title">' + dat.title + '</div><div class="win-controls"><div class="win-btn btn-min" onclick="minimizeWindow(\'' + id + '\')"></div><div class="win-btn btn-close" onclick="closeWindow(\'' + id + '\')"></div></div></div><div class="win-body" style="position:relative">' + spinnerHtml + iframeStr + '</div>';
         
         layer.appendChild(win);
+
+        if(!dat.internal) {
+            var fEl = document.getElementById('frame-' + id);
+            if(fEl) {
+                fEl.addEventListener('load', function() {
+                    var ld = document.getElementById('loader-' + id);
+                    if(ld) ld.style.display = 'none';
+                    try {
+                        var doc = fEl.contentDocument || fEl.contentWindow.document;
+                        if(doc && doc.body.innerHTML.trim() === '') {
+                            fEl.dispatchEvent(new Event('error'));
+                        }
+                    } catch(e) {}
+                });
+                fEl.addEventListener('error', function() {
+                    var errDiv = document.createElement('div');
+                    errDiv.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;color:#fff;z-index:10;gap:12px;';
+                    errDiv.innerHTML = '<div style="font-size:3rem;opacity:.3">⚠️</div><div style="font-size:1.1rem;color:#888">Seite konnte nicht geladen werden</div><div style="font-size:.85rem;color:#555">' + dat.path + '</div><button onclick="this.parentElement.style.display=\'none\'" style="margin-top:8px;padding:8px 20px;background:#222;border:1px solid #444;color:#fff;border-radius:8px;cursor:pointer">Schließen</button>';
+                    fEl.parentElement.appendChild(errDiv);
+                });
+                fEl.addEventListener('load', function() {
+                    try {
+                        var doc = fEl.contentDocument || fEl.contentWindow.document;
+                        if(doc && doc.body.innerHTML.trim() === '') {
+                            fEl.dispatchEvent(new Event('error'));
+                        }
+                    } catch(e) {}
+                });
+            }
+        }
         
         if(dat.internal && id === 'settings') {
             let f = document.getElementById('frame-' + id);
@@ -563,6 +706,42 @@ function openWindow(id) {
                         <div class="setting-text"><b>Panic Key</b><small>Instant site redirection shortcut</small></div>
                         <input type="text" id="panic-input" maxlength="1" style="width:40px; text-align:center; font-weight:bold; font-size:16px;" onkeyup="window.parent.updateSysSetting('panicKey',this.value)">
                     </div>
+                    <div class="setting-card">
+                        <div class="setting-text"><b>Farbschema</b><small>Wähle ein Theme</small></div>
+                        <select id="theme-select" onchange="window.parent.setTheme(this.value);window.parent.updateSysSetting('theme',this.value)">
+                            <option value="default">Standard</option>
+                            <option value="blue">Blau</option>
+                            <option value="green">Grün</option>
+                            <option value="purple">Lila</option>
+                            <option value="orange">Orange</option>
+                        </select>
+                    </div>
+                    <div class="setting-card clickable" onclick="toggleFaq()">
+                        <div class="setting-text"><b>System FAQ</b><small>Troubleshooting & Hilfe</small></div>
+                        <i class="fas fa-question-circle" style="font-size:24px;color:#888"></i>
+                    </div>
+                    <div id="faq-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;">
+                        <div style="background:#111;border:1px solid #333;border-radius:16px;padding:30px;max-width:90%;width:500px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #333;padding-bottom:15px;margin-bottom:20px;">
+                                <h3 style="font-family:'Orbitron',sans-serif;margin:0;">SYSTEM FAQ</h3>
+                                <i class="fas fa-times" style="cursor:pointer;color:#fff;font-size:20px;" onclick="toggleFaq()"></i>
+                            </div>
+                            <div style="margin-bottom:20px;">
+                                <h4 style="color:#fff;margin-bottom:5px;">MOVIE NOT WORKING!</h4>
+                                <p style="color:#aaa;font-size:14px;line-height:1.5;">If the movies do not work for you, open the Browser app, click on Ultraviolet, and search for anything. This will fix the issue. Go back to Movies and they should play!</p>
+                            </div>
+                            <div>
+                                <h4 style="color:#fff;margin-bottom:5px;">TOO MANY GAMES</h4>
+                                <p style="color:#aaa;font-size:14px;line-height:1.5;">If you downloaded too many games and want to start fresh, open a new tab in your normal browser, press Ctrl + H, and clear your cache. This resets your saved data so you can start over.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function toggleFaq() {
+                            var m = document.getElementById('faq-modal');
+                            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+                        }
+                    <\/script>
                     <script>
                         var prefs = window.parent.sysConfig;
                         document.getElementById('chk-bg').checked = prefs.optBg;
@@ -571,6 +750,8 @@ function openWindow(id) {
                         document.getElementById('chk-redir').checked = prefs.redirectConfirm;
                         document.getElementById('cloak-select').value = prefs.cloak;
                         document.getElementById('panic-input').value = prefs.panicKey;
+                        var ts = document.getElementById('theme-select');
+                        if(ts) ts.value = prefs.theme || 'default';
                     <\/script>
                 </body>
                 </html>`;
@@ -1159,6 +1340,95 @@ window.closeCiri = function() {
     isCiriActive = false;
 };
 
+window.cycleMode = function() {
+    cMode = (cMode + 1) % MODES.length;
+    document.getElementById('mode-toggle').textContent = MODES[cMode];
+    document.getElementById('mode-toggle').className = MODES[cMode] === 'LIVE' ? 'live-active' : '';
+};
+
+window.handleFileUpload = function(e) {
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+        cImgB64 = ev.target.result.split(',')[1];
+        cImgMime = file.type;
+        document.getElementById('img-preview').src = ev.target.result;
+        document.getElementById('img-preview-box').style.display = 'flex';
+    };
+    reader.readAsDataURL(file);
+};
+
+window.clearImage = function() {
+    cImgB64 = null;
+    cImgMime = null;
+    document.getElementById('img-preview').src = '';
+    document.getElementById('img-preview-box').style.display = 'none';
+    document.getElementById('file-upload').value = '';
+};
+
+window.handleSend = function() {
+    var inp = document.getElementById('chat-input');
+    var txt = inp.value.trim();
+    if(!txt && !cImgB64) return;
+    inp.value = '';
+    inp.style.height = '5px';
+    document.getElementById('img-preview-box').style.display = 'none';
+
+    var ch = document.getElementById('chat-history');
+
+    var userMsg = document.createElement('div');
+    userMsg.className = 'message user';
+    userMsg.textContent = txt || '(Bild)';
+    ch.appendChild(userMsg);
+    ch.scrollTop = ch.scrollHeight;
+
+    var apiKey = localStorage.getItem('ciri_key');
+    if(!apiKey) {
+        var noKeyMsg = document.createElement('div');
+        noKeyMsg.className = 'message ciri';
+        noKeyMsg.innerHTML = 'Kein API-Key gesetzt. Speichere einen unter <b>ciri_key</b> im localStorage.';
+        ch.appendChild(noKeyMsg);
+        ch.scrollTop = ch.scrollHeight;
+        return;
+    }
+
+    var orb = document.getElementById('action-orb');
+    orb.classList.add('thinking');
+
+    var contents = [{text: txt || ''}];
+    if(cImgB64) {
+        contents.unshift({inlineData: {mimeType: cImgMime, data: cImgB64}});
+        cImgB64 = null; cImgMime = null;
+    }
+
+    var body = {contents: [{parts: contents}]};
+    if(MODES[cMode] !== 'FAST') {
+        body.generationConfig = {temperature: MODES[cMode] === 'LIVE' ? 0.9 : 0.7};
+    }
+
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + apiKey, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+    }).then(function(r) { return r.json(); }).then(function(d) {
+        orb.classList.remove('thinking');
+        var reply = d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts ? d.candidates[0].content.parts.map(function(p) { return p.text; }).join('') : 'Keine Antwort erhalten.';
+        var ciriMsg = document.createElement('div');
+        ciriMsg.className = 'message ciri';
+        ciriMsg.innerHTML = marked.parse ? marked.parse(reply) : reply;
+        ch.appendChild(ciriMsg);
+        ch.scrollTop = ch.scrollHeight;
+    }).catch(function(err) {
+        orb.classList.remove('thinking');
+        var errMsg = document.createElement('div');
+        errMsg.className = 'message ciri';
+        errMsg.textContent = 'Fehler: ' + err.message;
+        ch.appendChild(errMsg);
+        ch.scrollTop = ch.scrollHeight;
+    });
+};
+
 var aMedia = null;
 var nHide;
 var cNoti = document.getElementById('dante-noti');
@@ -1324,6 +1594,7 @@ drawFV();
 var fLT = performance.now();
 var fFr = 0;
 var fLC = 0;
+var fHD = 0;
 
 function chkFps() {
     let nw = performance.now();
@@ -1344,8 +1615,21 @@ function chkFps() {
                 if(lv) lv.pause();
                 showNotification("System Optimized", "Low FPS detected. Backgrounds paused.");
             }
+        } else if(cFps > 30 && sysConfig.optBg && !document.hidden) {
+            fHD++;
+            if(fHD >= 10) {
+                sysConfig.optBg = false;
+                fHD = 0;
+                localStorage.setItem('cine_sys_config', JSON.stringify(sysConfig));
+                let bv = document.getElementById('bg-video');
+                let lv = document.getElementById('lock-video');
+                if(bv && bv.src) bv.play().catch(function(){});
+                if(lv && lv.src) lv.play().catch(function(){});
+                showNotification("Performance Restored", "FPS recovered. Backgrounds resumed.");
+            }
         } else {
             fLC = 0;
+            fHD = 0;
         }
         
         fFr = 0;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR-Code</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
+h2{font-size:1rem;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;align-self:flex-start}
+#inp{width:100%;max-width:400px;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;font-size:14px;outline:none;font-family:inherit}
+#inp:focus{border-color:#888}
+#btn{width:100%;max-width:400px;margin-top:10px;padding:12px;background:#fff;color:#000;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:14px}
+#btn:hover{background:#ddd}
+#qr-wrap{margin-top:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+#qr-wrap img{border-radius:12px;background:#fff;padding:16px;max-width:280px}
+#qr-wrap .hint{font-size:.8rem;color:#555}
+</style>
+</head>
+<body>
+<h2>📱 QR-Code Generator</h2>
+<input id="inp" type="text" placeholder="Text oder URL eingeben..." autofocus>
+<button id="btn" onclick="gen()">QR-Code erstellen</button>
+<div id="qr-wrap"></div>
+<script>
+function gen(){
+  var t=document.getElementById('inp').value.trim();
+  if(!t)return;
+  var el=document.getElementById('qr-wrap');
+  el.innerHTML='<img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data='+encodeURIComponent(t)+'" alt="QR-Code"><div class="hint">Scanne den Code mit deinem Handy</div>';
+}
+document.getElementById('inp').addEventListener('keydown',function(e){if(e.key==='Enter')gen()});
+</script>
+</body>
+</html>

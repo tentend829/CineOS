@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notizen</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;padding:20px}
+h2{font-size:1rem;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+#list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:8px}
+#list::-webkit-scrollbar{width:4px}
+#list::-webkit-scrollbar-thumb{background:#444;border-radius:4px}
+.note{background:#111;border:1px solid #333;border-radius:12px;padding:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.note-text{flex:1;font-size:14px;line-height:1.5;color:#ddd;white-space:pre-wrap;word-break:break-word}
+.note del{color:#666}
+.note-actions{display:flex;gap:6px;flex-shrink:0}
+.note-actions button{background:#222;border:1px solid #444;color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;transition:.15s}
+.note-actions button:hover{background:#fff;color:#000}
+#bottom{display:flex;gap:10px;margin-top:12px}
+#inp{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:12px;color:#fff;font-size:14px;outline:none;resize:none;font-family:inherit;min-height:44px}
+#inp:focus{border-color:#888}
+#add{padding:12px 20px;background:#fff;color:#000;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-size:14px}
+#add:hover{background:#ddd}
+</style>
+</head>
+<body>
+<h2>📝 Notizen</h2>
+<div id="list"></div>
+<div id="bottom">
+<textarea id="inp" placeholder="Neue Notiz..." rows="2"></textarea>
+<button id="add" onclick="addNote()">+</button>
+</div>
+<script>
+var KEY='dante_notes';
+function load(){return JSON.parse(localStorage.getItem(KEY))||[]}
+function save(n){localStorage.setItem(KEY,JSON.stringify(n))}
+function render(){
+  var notes=load();var el=document.getElementById('list');el.innerHTML='';
+  notes.forEach(function(n,i){
+    var d=document.createElement('div');d.className='note';
+    d.innerHTML='<div class="note-text'+(n.done?' done":"')+'">'+(n.done?'<del>'+esc(n.t)+'</del>':esc(n.t))+'</div><div class="note-actions"><button onclick="toggle('+i+')">'+(n.done?'↩':'✓')+'</button><button onclick="del('+i+')">✕</button></div>';
+    el.appendChild(d);
+  });
+  if(notes.length===0)el.innerHTML='<div style="color:#555;text-align:center;margin-top:40px;font-size:14px">Keine Notizen ✏️</div>';
+}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function addNote(){
+  var inp=document.getElementById('inp');var t=inp.value.trim();if(!t)return;
+  var notes=load();notes.push({t:t,done:false});save(notes);inp.value='';render();
+}
+function del(i){var n=load();n.splice(i,1);save(n);render()}
+function toggle(i){var n=load();n[i].done=!n[i].done;save(n);render()}
+document.getElementById('inp').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addNote()}});
+render();
+</script>
+</body>
+</html>

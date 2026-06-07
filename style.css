@@ -527,6 +527,7 @@ body {
 #app-drawer.open { display: block; opacity: 1; }
 .drawer-search-wrap { max-width: 600px; margin: 0 auto 40px auto; }
 .drawer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto; }
+.drawer-cat-header { grid-column: 1 / -1; color: #666; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0 -10px 0; padding-bottom: 4px; border-bottom: 1px solid #222; }
 .drawer-item { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
 .drawer-item:hover { transform: scale(1.1); }
 .drawer-item img { width: 60px; height: 60px; border-radius: 16px; object-fit: contain; }
@@ -547,7 +548,7 @@ body {
 }
 
 .window.active { opacity: 1; pointer-events: auto; transform: scale(1); z-index: var(--z-windows); }
-.window.minimized { transform: translateY(100%) scale(0.5); opacity: 0; pointer-events: none; }
+.window.minimized { transform: translateY(100vh) scale(0.3); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 .win-header {
     position: absolute;
     top: 0;

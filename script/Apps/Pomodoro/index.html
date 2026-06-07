@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pomodoro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{text-align:center;width:100%;max-width:400px;padding:20px}
+#mode{font-size:.85rem;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+#disp{font-size:5rem;font-weight:300;letter-spacing:4px;font-family:monospace;font-variant-numeric:tabular-nums;margin-bottom:8px}
+#phase{font-size:.8rem;color:#555;margin-bottom:24px;min-height:20px}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+button{padding:12px 24px;font-size:.95rem;border:1px solid #333;border-radius:10px;background:#111;color:#fff;cursor:pointer;transition:.15s;font-weight:600}
+button:hover{background:#222;border-color:#fff}
+button:active{transform:scale(.95)}
+.start{background:#fff;color:#000;border-color:#fff}
+.start:hover{background:#ddd}
+.times{display:flex;gap:8px;justify-content:center;margin-bottom:20px}
+.times button{font-size:.8rem;padding:6px 14px;border-radius:8px;background:#1a1a1a;border-color:#333}
+.times .act{background:#fff;color:#000;border-color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="mode">Fokus</div>
+<div class="times">
+<button class="act" onclick="setMode(0)">25:00</button>
+<button onclick="setMode(1)">05:00</button>
+<button onclick="setMode(2)">15:00</button>
+</div>
+<div id="disp">25:00</div>
+<div id="phase"></div>
+<div class="btns">
+<button id="btn-start" class="start" onclick="toggle()">Start</button>
+<button onclick="reset()">Reset</button>
+</div>
+</div>
+<script>
+var MODES=[{n:'Fokus',t:25},{n:'Pause',t:5},{n:'Erholung',t:15}];
+var cur=0,sec=MODES[0].t*60,run=false,iv=null;
+
+function fmt(s){var m=Math.floor(s/60);var sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')}
+function up(){document.getElementById('disp').textContent=fmt(sec);document.getElementById('mode').textContent=MODES[cur].n}
+function setMode(i){
+  if(run)return;
+  cur=i;sec=MODES[cur].t*60;
+  document.querySelectorAll('.times button').forEach(function(b,i2){b.className=i2===i?'act':''});
+  up();
+}
+function toggle(){
+  run=!run;
+  document.getElementById('btn-start').textContent=run?'Stopp':'Start';
+  document.getElementById('btn-start').className=run?'':'start';
+  document.getElementById('phase').textContent=run?'Läuft...':'Pausiert';
+  if(run){
+    iv=setInterval(function(){
+      sec--;
+      if(sec<=0){
+        clearInterval(iv);run=false;
+        document.getElementById('btn-start').textContent='Start';document.getElementById('btn-start').className='start';
+        document.getElementById('phase').textContent='✅ Fertig!';
+        var n=new Notification('Pomodoro',{body:MODES[cur].n+' abgeschlossen!'});
+      }
+      up();
+    },1000);
+  } else {clearInterval(iv);document.getElementById('phase').textContent=''}
+}
+function reset(){clearInterval(iv);run=false;sec=MODES[cur].t*60;document.getElementById('phase').textContent='';document.getElementById('btn-start').textContent='Start';document.getElementById('btn-start').className='start';up()}
+Notification.requestPermission();
+</script>
+</body>
+</html>

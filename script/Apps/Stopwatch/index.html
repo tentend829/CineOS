@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{text-align:center}
+#disp{font-size:4rem;font-weight:300;letter-spacing:4px;font-variant-numeric:tabular-nums;margin-bottom:30px;font-family:monospace}
+.btns{display:flex;gap:12px;justify-content:center}
+button{padding:14px 30px;font-size:1rem;border:1px solid #333;border-radius:12px;background:#111;color:#fff;cursor:pointer;transition:.15s;font-weight:600}
+button:hover{background:#222;border-color:#fff}
+button:active{transform:scale(.95)}
+.start{background:#fff;color:#000;border-color:#fff}
+.start:hover{background:#ddd}
+.lap{border-color:#444;color:#888}
+#laps{margin-top:24px;max-height:200px;overflow-y:auto;text-align:left;padding:0 20px}
+#laps::-webkit-scrollbar{width:4px}
+#laps::-webkit-scrollbar-thumb{background:#444;border-radius:4px}
+.lap-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a;font-family:monospace;font-size:14px;color:#aaa}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="disp">00:00.00</div>
+<div class="btns">
+<button id="btn-start" class="start" onclick="toggle()">Start</button>
+<button id="btn-lap" class="lap" onclick="lap()" style="display:none">Runde</button>
+<button onclick="reset()">Reset</button>
+</div>
+<div id="laps"></div>
+</div>
+<script>
+var ms=0,run=false,iv=null,laps=[];
+function fmt(){
+  var m=Math.floor(ms/60000);var s=Math.floor((ms%60000)/1000);var c=Math.floor((ms%1000)/10);
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(c).padStart(2,'0');
+}
+function update(){document.getElementById('disp').textContent=fmt()}
+function toggle(){
+  run=!run;
+  document.getElementById('btn-start').textContent=run?'Stopp':'Start';
+  document.getElementById('btn-start').className=run?'':'start';
+  document.getElementById('btn-lap').style.display=run?'inline-block':'none';
+  if(run){iv=setInterval(function(){ms+=10;update()},10)}
+  else{clearInterval(iv)}
+}
+function lap(){
+  if(!run)return;
+  laps.push(ms);
+  var el=document.getElementById('laps');
+  var d=document.createElement('div');d.className='lap-item';
+  d.innerHTML='<span>Runde '+laps.length+'</span><span>'+fmt()+'</span>';
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function reset(){
+  clearInterval(iv);run=false;ms=0;laps=[];
+  document.getElementById('btn-start').textContent='Start';document.getElementById('btn-start').className='start';
+  document.getElementById('btn-lap').style.display='none';
+  document.getElementById('laps').innerHTML='';update();
+}
+</script>
+</body>
+</html>

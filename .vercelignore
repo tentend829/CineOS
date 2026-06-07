@@ -1,0 +1,11 @@
+# Große Videodateien vom Deployment ausschließen
+Videos/*.mp4
+Videos/*.MOV
+Videos/*.PNG
+Videos/*.png
+script/Apps/Cine/Netflix.mp4
+Netflix.mp4
+.gitignore
+README.md
+package-lock.json
+proprietary license.txt
