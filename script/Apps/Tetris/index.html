@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Tetris</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#fff;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;overflow:hidden;gap:12px}
+h3{font-weight:300;letter-spacing:2px;color:#888}
+canvas{border:1px solid #333;border-radius:4px}
+#info{display:flex;gap:30px;font-size:14px;color:#aaa}
+#info span{color:#69db7c;font-weight:600}
+#restart{padding:6px 16px;background:#333;border:1px solid #555;color:#fff;border-radius:6px;cursor:pointer;font-size:13px}
+#restart:hover{background:#444}
+</style></head><body>
+<h3>TETRIS</h3>
+<div id="info">Score: <span id="score">0</span> | Lines: <span id="lines">0</span></div>
+<canvas id="c" width="240" height="480"></canvas>
+<button id="restart">↻ Neustart</button>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const S=[1,1,1,1],I=[1,1,1,1],L=[1,0,1,0,1,1],J=[0,1,0,1,1,1],O=[1,1,1,1],T=[0,1,0,1,1,1,0,1,0],Z=[1,1,0,0,1,1],S2=[0,1,1,1,1,0];
+const SHAPES=[{s:2,data:S},{s:4,data:I},{s:2,data:L},{s:2,data:J},{s:2,data:O},{s:3,data:T},{s:2,data:Z},{s:2,data:S2}];
+const COLORS=['#f66','#6ff','#f90','#69f','#ff6','#96f','#f6f','#6f6'];
+let board=[],piece,px,py,score=0,lines=0,gameover=false,timer;
+function initBoard(){board=Array.from({length:20},()=>Array(10).fill(0))}
+function newPiece(){let i=Math.floor(Math.random()*SHAPES.length);let s=SHAPES[i];piece={data:s.data,size:s.s,color:COLORS[i]};px=3;py=0;if(!valid(piece.data,px,py)){gameover=true;clearInterval(timer)}}
+function valid(data,dx,dy){let s=Math.sqrt(data.length)||2;for(let y=0;y<s;y++)for(let x=0;x<s;x++){if(data[y*s+x]){let nx=dx+x,ny=dy+y;if(nx<0||nx>=10||ny>=20||(ny>=0&&board[ny][nx]))return false}}return true}
+function lock(){let s=piece.size;for(let y=0;y<s;y++)for(let x=0;x<s;x++){if(piece.data[y*s+x]){let ny=py+y;if(ny>=0)board[ny][px+x]=piece.color}}
+clearLines();newPiece();draw()}
+function clearLines(){let cleared=0;for(let y=19;y>=0;y--){if(board[y].every(c=>c)){board.splice(y,1);board.unshift(Array(10).fill(0));cleared++;y++}}
+if(cleared){lines+=cleared;score+=cleared*100;document.getElementById('score').textContent=score;document.getElementById('lines').textContent=lines}}
+function move(dx){if(!gameover&&valid(piece.data,px+dx,py)){px+=dx;draw()}}
+function rotate(){if(gameover)return;let s=piece.size;let nd=[];for(let y=0;y<s;y++)for(let x=0;x<s;x++)nd[x*s+(s-1-y)]=piece.data[y*s+x];if(valid(nd,px,py))piece.data=nd;draw()}
+function drop(){if(gameover)return;while(valid(piece.data,px,py+1))py++;lock()}
+function tick(){if(gameover)return;if(valid(piece.data,px,py+1)){py++;draw()}else{lock()}}
+function draw(){ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,240,480);
+for(let y=0;y<20;y++)for(let x=0;x<10;x++){if(board[y][x]){ctx.fillStyle=board[y][x];ctx.fillRect(x*24,y*24,23,23)}}
+let s=piece.size;for(let y=0;y<s;y++)for(let x=0;x<s;x++){if(piece.data[y*s+x]&&py+y>=0){ctx.fillStyle=piece.color;ctx.fillRect((px+x)*24,(py+y)*24,23,23)}}
+if(gameover){ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(0,0,240,480);ctx.fillStyle='#f66';ctx.font='bold 20px sans-serif';ctx.textAlign='center';ctx.fillText('GAME OVER',120,240);
+ctx.fillStyle='#888';ctx.font='12px sans-serif';ctx.fillText('Klick "Neustart"',120,270)}}
+document.addEventListener('keydown',e=>{if(gameover)return;if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1);if(e.key==='ArrowDown')tick();if(e.key==='ArrowUp')rotate();if(e.key===' ')e.preventDefault(),drop()});
+document.getElementById('restart').onclick=()=>{clearInterval(timer);initBoard();score=0;lines=0;gameover=false;document.getElementById('score').textContent='0';document.getElementById('lines').textContent='0';newPiece();draw();timer=setInterval(tick,400)};
+document.getElementById('restart').click();
+</script></body></html>

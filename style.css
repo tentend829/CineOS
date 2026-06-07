@@ -469,7 +469,7 @@ body {
 .desktop-large-mode .d-folder-grid { width: 70px; height: 70px; padding: 6px; gap: 4px; }
 .d-folder-grid img { width: 100%; height: 100%; object-fit: contain; border-radius: 4px; }
 
-#drag-proxy { position: fixed; z-index: 9999; pointer-events: none; opacity: 0.8; display: none; width: 50px; height: 50px; }
+#drag-proxy { position: fixed; z-index: 9999; pointer-events: none; opacity: 0.8; display: none; width: var(--drag-proxy-size, 50px); height: var(--drag-proxy-size, 50px); }
 #drag-proxy img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; }
 .hidden-badge { position: absolute; top: -5px; right: -5px; background: #fff; color: #000; font-weight: bold; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; align-items: center; justify-content: center; z-index: 2; }
 
@@ -532,6 +532,7 @@ body {
 .drawer-item:hover { transform: scale(1.1); }
 .drawer-item img { width: 60px; height: 60px; border-radius: 16px; object-fit: contain; }
 .drawer-item span { color: #fff; font-size: 13px; font-weight: 600; }
+.desk-dot.active { background: #69db7c !important; }
 
 .window {
     position: fixed;

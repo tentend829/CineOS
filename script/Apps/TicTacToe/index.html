@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Tic Tac Toe</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#fff;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;overflow:hidden;gap:16px}
+h3{font-weight:300;letter-spacing:2px;color:#888}
+#board{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:240px;height:240px}
+.cell{background:#1a1a1a;border:1px solid #333;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer;transition:.15s;font-weight:700}
+.cell:hover{background:#2a2a2a}
+.cell.x{color:#69db7c}
+.cell.o{color:#74c0fc}
+#status{font-size:16px;color:#aaa;min-height:24px}
+#reset{padding:6px 18px;background:#333;border:1px solid #555;color:#fff;border-radius:6px;cursor:pointer;font-size:13px}
+#reset:hover{background:#444}
+</style></head><body>
+<h3>TIC TAC TOE</h3>
+<div id="board"></div>
+<div id="status">Dein Zug (X)</div>
+<button id="reset">↻ Neustart</button>
+<script>
+const board=document.getElementById('board'),status=document.getElementById('status');
+let cells=[],turn='x',moves=0,gameover=false;
+function init(){board.innerHTML='';cells=[];turn='x';moves=0;gameover=false;status.textContent='Dein Zug (X)';
+for(let i=0;i<9;i++){let d=document.createElement('div');d.className='cell';d.dataset.i=i;
+d.onclick=()=>{if(gameover||d.textContent||turn==='o')return;d.textContent='X';d.classList.add('x');moves++;if(checkWin('X')){status.textContent='Du gewinnst! 🎉';gameover=true;return}if(moves===9){status.textContent='Unentschieden!';gameover=true;return}turn='o';status.textContent='Gegner denkt...';setTimeout(aiMove,300)};
+board.appendChild(d);cells.push(d)}}
+function checkWin(p){let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+return w.some(([a,b,c])=>cells[a].textContent===p&&cells[b].textContent===p&&cells[c].textContent===p)}
+function aiMove(){let b=cells.map(c=>c.textContent);
+let best=minimax(b,'o');if(best.idx!==-1&&!gameover){cells[best.idx].textContent='O';cells[best.idx].classList.add('o');moves++;
+if(checkWin('O')){status.textContent='Gegner gewinnt!';gameover=true;return}
+if(moves===9){status.textContent='Unentschieden!';gameover=true;return}
+turn='x';status.textContent='Dein Zug (X)'}}
+function minimax(b,p){let e=check(b);if(e==='x')return{score:-10};if(e==='o')return{score:10};if(b.every(c=>c))return{score:0};
+let moves2=[];for(let i=0;i<9;i++){if(b[i])continue;let nb=[...b];nb[i]=p;let r=minimax(nb,p==='x'?'o':'x');moves2.push({idx:i,score:r.score})}
+let best=p==='o'?moves2.reduce((a,c)=>c.score>a.score?c:a,{score:-Infinity}):moves2.reduce((a,c)=>c.score<a.score?c:a,{score:Infinity});
+return best.idx!==undefined?best:{score:0,idx:-1}}
+function check(b){let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+for(let l of w){if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[1]]===b[l[2]])return b[l[0]]}return null}
+document.getElementById('reset').onclick=init;
+init();
+</script></body></html>

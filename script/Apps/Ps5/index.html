@@ -1663,6 +1663,63 @@ const CDN_HTML = HTML;
         }, 1000);
         document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
+        /* ─── Favorites System ─── */
+        var psFavs = JSON.parse(localStorage.getItem('ps5_favorites') || '[]');
+        function toggleFav(title) {
+            var idx = psFavs.indexOf(title);
+            if(idx > -1) psFavs.splice(idx, 1);
+            else psFavs.push(title);
+            localStorage.setItem('ps5_favorites', JSON.stringify(psFavs));
+            renderCards();
+            if(typeof renderRecommended === 'function') renderRecommended();
+        }
+        function isFav(title) { return psFavs.includes(title); }
+        
+        // Patch renderCards to add favorite stars
+        var origRenderCards = renderCards;
+        renderCards = function() {
+            origRenderCards();
+            // Add favorite stars to cards
+            document.querySelectorAll('#track .card').forEach(function(c, i) {
+                var list = getActiveList();
+                if(!list[i]) return;
+                var star = document.createElement('div');
+                star.style.cssText = 'position:absolute;top:6px;right:6px;font-size:16px;cursor:pointer;z-index:5;text-shadow:0 0 6px rgba(0,0,0,0.8);color:' + (isFav(list[i].title) ? '#ffd700' : '#555') + ';transition:.2s';
+                star.textContent = isFav(list[i].title) ? '★' : '☆';
+                star.onclick = function(e) { e.stopPropagation(); toggleFav(list[i].title); };
+                var existing = c.querySelector('.fav-star');
+                if(existing) existing.remove();
+                star.className = 'fav-star';
+                c.style.position = 'relative';
+                c.appendChild(star);
+            });
+        };
+        
+        // Render favorites in recommended section
+        var origRenderRecommended = renderRecommended;
+        renderRecommended = function() {
+            origRenderRecommended();
+            var favs = psFavs;
+            if(!favs.length) return;
+            var track = document.getElementById('track-rec');
+            if(!track) return;
+            // Add a separator
+            var sep = document.createElement('div');
+            sep.style.cssText = 'width:100%;padding:10px 0 4px;font-size:11px;color:#ffd700;letter-spacing:1px';
+            sep.textContent = '★ FAVORITEN';
+            track.parentElement.insertBefore(sep, track);
+            favs.forEach(function(title) {
+                // Find the game in NOAH_GAMES
+                var g = NOAH_GAMES.find(function(n) { return n.title === title; });
+                if(!g) return;
+                var div = document.createElement('div');
+                div.className = 'card rec-card';
+                div.style.cssText = 'min-width:140px;height:80px;border-radius:8px;overflow:hidden;cursor:pointer;position:relative;border:1px solid rgba(255,215,0,0.3)';
+                div.innerHTML = '<div class="card-bg" style="background-image:url(' + (g.image || '') + ');background-size:cover;background-position:center;width:100%;height:100%"></div><div style="position:absolute;bottom:4px;left:6px;font-size:10px;color:#fff;text-shadow:0 1px 4px #000;font-weight:600">' + g.title + '</div>';
+                div.onclick = function() { executeItem(g); };
+                track.appendChild(div);
+            });
+        };
     </script>
 </body>
 </html>

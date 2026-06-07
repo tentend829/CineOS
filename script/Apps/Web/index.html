@@ -1,31 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iframe Page</title>
-    <style>
-        html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
-        iframe { width: 100%; height: 100%; border: none; display: none; }
-        #ntf {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(20,20,20,0.9); color: #fff; padding: 10px 18px;
-            border-radius: 12px; border: 1px solid #333; z-index: 99;
-            display: none; align-items: center; gap: 12px; backdrop-filter: blur(5px);
-        }
-        #ntf b { color: #2ecc71; }
-        #btn { background: #333; border: none; color: #fff; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; }
-        #ld { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; color: #444; background: #000; }
-    </style>
-</head>
-<body>
-    <div id="ld">Initialising...</div>
-    <iframe id="ifr" allowfullscreen allow="autoplay; fullscreen; gamepad; microphone; camera"></iframe>
-
-    <script>
-        document.getElementById('ifr').src = "https://www.google.com";
-        document.getElementById('ifr').style.display = 'block';
-        document.getElementById('ld').style.display = 'none';
-    </script>
-</body>
-</html>
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>DanTe-Web</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#fff;font-family:'Segoe UI',sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#bar{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#1a1a1a;border-bottom:1px solid #333;flex-wrap:wrap}
+#bar button{padding:4px 10px;background:#333;border:1px solid #555;color:#fff;border-radius:5px;cursor:pointer;font-size:12px}
+#bar button:hover{background:#444}
+#bar button:disabled{opacity:.3}
+#url{flex:1;padding:5px 10px;background:#222;border:1px solid #444;color:#fff;border-radius:5px;font-size:13px;min-width:100px}
+#bookmarks{display:flex;gap:4px;padding:4px 10px;background:#161616;border-bottom:1px solid #222;flex-wrap:wrap;overflow-x:auto}
+.bm{padding:3px 8px;background:#222;border:1px solid #333;border-radius:4px;color:#aaa;font-size:11px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.bm:hover{background:#2a2a2a;color:#fff}
+.bm .del{color:#555;font-size:10px;margin-left:2px;cursor:pointer}
+.bm .del:hover{color:#f66}
+#bm-add{color:#555;font-size:11px;cursor:pointer;padding:3px 6px;border-radius:4px}
+#bm-add:hover{background:#222;color:#aaa}
+#viewer{flex:1;position:relative;background:#000}
+#viewer iframe{width:100%;height:100%;border:none}
+#ld{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#555;font-size:13px;background:#000;gap:10px}
+.spin{width:16px;height:16px;border:2px solid #333;border-top-color:#fff;border-radius:50%;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+</style></head><body>
+<div id="bar"><button id="back" disabled>◀</button><button id="fwd" disabled>▶</button><button id="reload">↻</button><input id="url" placeholder="URL eingeben..."><button id="go">Go</button></div>
+<div id="bookmarks"><span id="bm-add">+ Lesezeichen</span></div>
+<div id="viewer"><div id="ld"><div class="spin"></div>Lade...</div><iframe id="ifr" allowfullscreen allow="autoplay;fullscreen;gamepad;microphone;camera"></iframe></div>
+<script>
+const ifr=document.getElementById('ifr'),url=document.getElementById('url'),ld=document.getElementById('ld');
+const back=document.getElementById('back'),fwd=document.getElementById('fwd'),rel=document.getElementById('reload'),go=document.getElementById('go');
+let history=[],hIdx=-1;
+let bookmarks=JSON.parse(localStorage.getItem('web_bookmarks')||'[]');
+function saveBm(){localStorage.setItem('web_bookmarks',JSON.stringify(bookmarks))}
+function renderBm(){let c=document.getElementById('bookmarks');let add=c.querySelector('#bm-add');c.innerHTML='';
+bookmarks.forEach((b,i)=>{let d=document.createElement('div');d.className='bm';
+d.innerHTML='<span>📑 '+b.title+'</span><span class="del" data-idx="'+i+'">✕</span>';
+d.onclick=function(e){if(e.target.classList.contains('del')){bookmarks.splice(parseInt(e.target.dataset.idx),1);saveBm();renderBm()}else navigate(b.url)};
+c.appendChild(d)});c.appendChild(add)}
+function navigate(u){if(!u)return;if(!u.match(/^https?:\/\//i))u='https://'+u;
+if(hIdx<history.length-1)history=history.slice(0,hIdx+1);history.push(u);hIdx++;
+url.value=u;ld.style.display='flex';ifr.src=u;back.disabled=hIdx<=0;fwd.disabled=hIdx>=history.length-1;}
+ifr.onload=function(){ld.style.display='none'};
+ifr.onerror=function(){ld.innerHTML='<span style="color:#f66">Fehler beim Laden</span>';ld.style.display='flex'};
+go.onclick=()=>navigate(url.value);
+url.addEventListener('keydown',e=>{if(e.key==='Enter')navigate(url.value)});
+back.onclick=()=>{if(hIdx>0){hIdx--;let u=history[hIdx];url.value=u;ld.style.display='flex';ifr.src=u;back.disabled=hIdx<=0;fwd.disabled=hIdx>=history.length-1}};
+fwd.onclick=()=>{if(hIdx<history.length-1){hIdx++;let u=history[hIdx];url.value=u;ld.style.display='flex';ifr.src=u;back.disabled=hIdx<=0;fwd.disabled=hIdx>=history.length-1}};
+rel.onclick=()=>{ld.style.display='flex';ifr.src=ifr.src};
+document.getElementById('bm-add').onclick=function(){let t=prompt('Name des Lesezeichens:');if(!t)return;let u=url.value.trim();if(!u)return;
+bookmarks.push({title:t,url:u});saveBm();renderBm()};
+renderBm();navigate('https://www.google.com');
+</script></body></html>

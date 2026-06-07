@@ -283,6 +283,37 @@
       <svg viewBox="0 0 24 24"><path d="M11.5 8c-4.35 0-7.98 2.9-9.98 7.22l2.37.78c1.05-3.19 4.06-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6c-1.84-1.61-4.24-2.6-6.9-2.6z"/></svg>
     </button>
   </nav>
+  <div class="media-extras" style="display:flex;align-items:center;gap:10px;padding:6px 14px 10px">
+    <span style="color:#666;font-size:11px">🔊</span>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1" style="flex:1;height:4px;accent-color:#fff;cursor:pointer" aria-label="Volume">
+    <button id="eq-toggle" style="background:none;border:1px solid #333;color:#888;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px">EQ</button>
+    <button id="playlist-toggle" style="background:none;border:1px solid #333;color:#888;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px">♫</button>
+  </div>
+  <div id="eq-panel" style="display:none;padding:0 14px 10px;gap:4px">
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="color:#555;font-size:9px;width:12px">60</span>
+      <input type="range" class="eq-band" data-freq="60" min="-12" max="12" value="0" style="flex:1;height:3px;accent-color:#fff;cursor:pointer">
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="color:#555;font-size:9px;width:12px">250</span>
+      <input type="range" class="eq-band" data-freq="250" min="-12" max="12" value="0" style="flex:1;height:3px;accent-color:#fff;cursor:pointer">
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="color:#555;font-size:9px;width:12px">1K</span>
+      <input type="range" class="eq-band" data-freq="1000" min="-12" max="12" value="0" style="flex:1;height:3px;accent-color:#fff;cursor:pointer">
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="color:#555;font-size:9px;width:12px">4K</span>
+      <input type="range" class="eq-band" data-freq="4000" min="-12" max="12" value="0" style="flex:1;height:3px;accent-color:#fff;cursor:pointer">
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="color:#555;font-size:9px;width:12px">16K</span>
+      <input type="range" class="eq-band" data-freq="16000" min="-12" max="12" value="0" style="flex:1;height:3px;accent-color:#fff;cursor:pointer">
+    </div>
+  </div>
+  <div id="playlist-panel" style="display:none;padding:0 14px 10px;max-height:100px;overflow-y:auto">
+    <div id="playlist-queue" style="font-size:11px;color:#555"></div>
+  </div>
 </aside>
 
 <!-- Update Modal (Inline styles stripped out) -->

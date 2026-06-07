@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Audio Recorder</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;overflow:hidden}
+#status{font-size:14px;color:#888}
+#visualizer{width:300px;height:60px;background:#0a0a0a;border:1px solid #222;border-radius:8px}
+#controls{display:flex;gap:12px}
+#controls button{padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s}
+#record{background:#5a1a1a;color:#f66}
+#record:hover{background:#7a2a2a}
+#record.recording{background:#3a3a1a;color:#ff6;animation:pulse 1s infinite}
+#stop{background:#333;color:#aaa}
+#stop:hover{background:#444}
+#stop:disabled{opacity:.3;cursor:default}
+#play{background:#1a3a1a;color:#6f6}
+#play:hover{background:#2a5a2a}
+#play:disabled{opacity:.3;cursor:default}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+#download{background:#1a1a3a;color:#66f}
+#download:hover{background:#2a2a5a}
+#download:disabled{opacity:.3;cursor:default}
+.timer{font-size:48px;font-weight:200;letter-spacing:2px;font-variant-numeric:tabular-nums;color:#aaa}
+</style></head><body>
+<div class="timer" id="timer">00:00</div>
+<div id="status">Bereit</div>
+<canvas id="visualizer" width="300" height="60"></canvas>
+<div id="controls"><button id="record">● Aufnehmen</button><button id="stop" disabled>■ Stop</button><button id="play" disabled>▶ Abspielen</button><button id="download" disabled>💾 Download</button></div>
+<script>
+const recBtn=document.getElementById('record'),stopBtn=document.getElementById('stop'),playBtn=document.getElementById('play'),dlBtn=document.getElementById('download');
+const status=document.getElementById('status'),timer=document.getElementById('timer');
+const canvas=document.getElementById('visualizer'),ctx=canvas.getContext('2d');
+let mediaRecorder,audioChunks=[],audioBlob,audioUrl,audioCtx,analyser,dataArray,animId;
+let startTime,timerInterval,stream;
+function updateTimer(){let s=Math.floor((Date.now()-startTime)/1000);let m=Math.floor(s/60);timer.textContent=(m<10?'0':'')+m+':'+(s%60<10?'0':'')+(s%60)}
+function drawVis(){if(!analyser)return;analyser.getByteFrequencyData(dataArray);ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,300,60);
+let bw=300/analyser.frequencyBinCount;for(let i=0;i<analyser.frequencyBinCount;i++){let h=dataArray[i]/255*60;ctx.fillStyle='#69db7c';ctx.fillRect(i*bw,60-h,bw-1,h)}
+animId=requestAnimationFrame(drawVis)}
+recBtn.onclick=async()=>{if(mediaRecorder&&mediaRecorder.state==='recording')return;
+try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){status.textContent='Mikrofon nicht verfügbar';return}
+audioCtx=new(window.AudioContext||window.webkitAudioContext)();let src=audioCtx.createMediaStreamSource(stream);analyser=audioCtx.createAnalyser();analyser.fftSize=128;dataArray=new Uint8Array(analyser.frequencyBinCount);src.connect(analyser);
+audioChunks=[];mediaRecorder=new MediaRecorder(stream);
+mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+mediaRecorder.onstop=()=>{cancelAnimationFrame(animId);audioBlob=new Blob(audioChunks,{type:'audio/webm'});audioUrl=URL.createObjectURL(audioBlob);
+playBtn.disabled=false;dlBtn.disabled=false;status.textContent='Aufnahme gespeichert ('+(audioBlob.size/1024).toFixed(1)+' KB)'};
+mediaRecorder.start();startTime=Date.now();timerInterval=setInterval(updateTimer,100);
+recBtn.textContent='● Aufnehmen...';recBtn.classList.add('recording');stopBtn.disabled=false;playBtn.disabled=true;dlBtn.disabled=true;status.textContent='Aufnahme läuft...';
+drawVis()};
+stopBtn.onclick=()=>{if(mediaRecorder&&mediaRecorder.state==='recording'){mediaRecorder.stop();stream.getTracks().forEach(t=>t.stop());clearInterval(timerInterval);
+recBtn.textContent='● Aufnehmen';recBtn.classList.remove('recording');stopBtn.disabled=true}};
+playBtn.onclick=()=>{if(!audioUrl)return;let a=new Audio(audioUrl);a.play()};
+dlBtn.onclick=()=>{if(!audioBlob)return;let a=document.createElement('a');a.href=audioUrl;a.download='aufnahme.webm';a.click()};
+</script></body></html>

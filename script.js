@@ -26,6 +26,15 @@ var APPS = {
     'snake': {title: 'Snake', path: 'script/Apps/Snake/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2721/2721287.png', pinned: false, cat: 'Spiele'},
     'countdown': {title: 'Countdown', path: 'script/Apps/Countdown/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2088/2088617.png', pinned: false, cat: 'Tools'},
     'terminal': {title: 'Terminal', path: 'script/Apps/Terminal/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png', pinned: false, cat: 'Tools'},
+    'paint': {title: 'Paint', path: 'script/Apps/Paint/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828941.png', pinned: false, cat: 'Tools'},
+    'stickynotes': {title: 'Haftnotizen', path: 'script/Apps/StickyNotes/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/483/483947.png', pinned: false, cat: 'Tools'},
+    'kalender': {title: 'Kalender', path: 'script/Apps/Kalender/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/747/747310.png', pinned: false, cat: 'Tools'},
+    'tetris': {title: 'Tetris', path: 'script/Apps/Tetris/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/2721/2721287.png', pinned: false, cat: 'Spiele'},
+    'tictactoe': {title: 'Tic Tac Toe', path: 'script/Apps/TicTacToe/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/1791/1791382.png', pinned: false, cat: 'Spiele'},
+    'memory': {title: 'Memory', path: 'script/Apps/Memory/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/1453/1453713.png', pinned: false, cat: 'Spiele'},
+    'audiorecorder': {title: 'Audio Recorder', path: 'script/Apps/AudioRecorder/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/10262/10262363.png', pinned: false, cat: 'Tools'},
+    'pdfviewer': {title: 'PDF Viewer', path: 'script/Apps/PDFViewer/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/337/337946.png', pinned: false, cat: 'Tools'},
+    'filemanager': {title: 'Datei-Manager', path: 'script/Apps/FileManager/index.html', icon: 'https://cdn-icons-png.flaticon.com/512/716/716784.png', pinned: false, cat: 'System'},
 };
 
 var savedPins = localStorage.getItem('c_pins_v2');
@@ -617,6 +626,8 @@ function openWindow(id) {
         win.innerHTML = '<div class="win-header" onmousedown="DragSystem.startWinDrag(event, \'' + id + '\')"><div class="win-title">' + dat.title + '</div><div class="win-controls"><div class="win-btn btn-min" onclick="minimizeWindow(\'' + id + '\')"></div><div class="win-btn btn-close" onclick="closeWindow(\'' + id + '\')"></div></div></div><div class="win-body" style="position:relative">' + spinnerHtml + iframeStr + '</div>';
         
         layer.appendChild(win);
+        
+        playSound('open');
 
         if(!dat.internal) {
             var fEl = document.getElementById('frame-' + id);
@@ -720,6 +731,16 @@ function openWindow(id) {
                         <div class="setting-text"><b>System FAQ</b><small>Troubleshooting & Hilfe</small></div>
                         <i class="fas fa-question-circle" style="font-size:24px;color:#888"></i>
                     </div>
+                    <div class="setting-card">
+                        <div class="setting-text"><b>Wallpaper-Shuffle</b><small>Wechselt alle 60 Sekunden</small></div>
+                        <label class="switch"><input type="checkbox" id="chk-shuffle" onchange="if(this.checked){window.parent.startWpShuffle();localStorage.setItem('wp_shuffle','true')}else{window.parent.stopWpShuffle();localStorage.setItem('wp_shuffle','false')}"><span class="slider"></span></label>
+                    </div>
+                    <div class="setting-card">
+                        <div class="setting-text"><b>Screensaver-Timeout</b><small>Minuten bis Screensaver startet</small></div>
+                        <select id="ss-timeout" onchange="localStorage.setItem('ss_timeout',this.value*60000);window.parent.resetSsTimer()">
+                            <option value="1">1 Min</option><option value="3" selected>3 Min</option><option value="5">5 Min</option><option value="10">10 Min</option><option value="30">30 Min</option><option value="0">Aus</option>
+                        </select>
+                    </div>
                     <div id="faq-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;">
                         <div style="background:#111;border:1px solid #333;border-radius:16px;padding:30px;max-width:90%;width:500px;">
                             <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #333;padding-bottom:15px;margin-bottom:20px;">
@@ -773,6 +794,7 @@ function closeWindow(id) {
     if(w) w.remove();
     if(activeWindowId === id) activeWindowId = null;
     endImmersiveMode();
+    playSound('close');
 }
 
 function minimizeWindow(id) {
@@ -1204,6 +1226,43 @@ function openWallpaperMenu() {
         chk.checked = sysConfig.wpLoop;
         chk.onchange = e => updateSysSetting('wpLoop', e.target.checked);
     }
+    
+    // Wallpaper search filter
+    let wSearch = document.getElementById('wp-search');
+    if(wSearch) {
+        wSearch.oninput = function() {
+            let q = this.value.toLowerCase();
+            document.querySelectorAll('.wp-card').forEach(function(c) {
+                let key = c.getAttribute('data-key') || c.querySelector('.wp-info')?.textContent || '';
+                c.style.display = key.toLowerCase().includes(q) ? '' : 'none';
+            });
+        };
+    }
+    
+    // Wallpaper drag & drop upload
+    let wpZone = document.getElementById('wp-drop-zone');
+    if(wpZone) {
+        wpZone.ondragover = function(e) { e.preventDefault(); this.style.borderColor = '#69db7c'; };
+        wpZone.ondragleave = function() { this.style.borderColor = '#333'; };
+        wpZone.ondrop = function(e) {
+            e.preventDefault(); this.style.borderColor = '#333';
+            var files = e.dataTransfer.files;
+            for(var fi=0; fi<files.length; fi++) {
+                (function(file) {
+                    if(!file.type.match(/^(video|image)\//)) return;
+                    var reader = new FileReader();
+                    reader.onload = function(ev) {
+                        var url = ev.target.result;
+                        var name = file.name.replace(/\.[^.]+$/, '');
+                        wallpaperRegistry[name] = {id: name, name: name, url: url, locked: false};
+                        showAllWallpapers();
+                        showNotification('Wallpaper hinzugefügt', '"' + name + '" wurde importiert.');
+                    };
+                    reader.readAsDataURL(file);
+                })(files[fi]);
+            }
+        };
+    }
 }
 
 var sInp = document.getElementById('start-search-input');
@@ -1338,7 +1397,28 @@ window.addEventListener('keyup', function(e) {
 window.closeCiri = function() {
     document.body.classList.remove('ciri-active');
     isCiriActive = false;
+    if(speechRecog) { speechRecog.abort(); speechRecog = null; }
 };
+
+/* ─── Ciri AI Speech-to-Text ─── */
+var speechRecog = null;
+function startSpeechInput() {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) { showNotification('Sprachmodus', 'Speech Recognition nicht verfügbar.'); return; }
+    speechRecog = new SR();
+    speechRecog.lang = 'de-DE';
+    speechRecog.continuous = false;
+    speechRecog.interimResults = false;
+    speechRecog.onresult = function(e) {
+        var txt = e.results[0][0].transcript;
+        var inp = document.getElementById('chat-input');
+        if(inp) { inp.value = txt; window.handleSend(); }
+    };
+    speechRecog.onerror = function() { showNotification('Sprachmodus', 'Fehler bei der Spracherkennung.'); speechRecog = null; };
+    speechRecog.onend = function() { speechRecog = null; };
+    speechRecog.start();
+    showNotification('Sprachmodus', 'Sprechen Sie jetzt...');
+}
 
 window.cycleMode = function() {
     cMode = (cMode + 1) % MODES.length;
@@ -1433,12 +1513,32 @@ var aMedia = null;
 var nHide;
 var cNoti = document.getElementById('dante-noti');
 
+// Notifications history
+var notiHistory = JSON.parse(localStorage.getItem('noti_history') || '[]');
+function addNotiHistory(title, text) {
+    notiHistory.unshift({title: title, text: text, time: Date.now()});
+    if(notiHistory.length > 20) notiHistory.length = 20;
+    localStorage.setItem('noti_history', JSON.stringify(notiHistory));
+}
+function showNotiHistory() {
+    let h = notiHistory.map(function(n) { return '<div style="padding:8px 0;border-bottom:1px solid #222;font-size:12px"><strong style="color:#aaa">' + n.title + '</strong><br><span style="color:#666">' + n.text + '</span><br><span style="color:#444;font-size:10px">' + new Date(n.time).toLocaleTimeString('de-DE') + '</span></div>'; }).join('');
+    let d = document.createElement('div');
+    d.style.cssText = 'position:fixed;bottom:70px;right:20px;width:320px;max-height:400px;background:#111;border:1px solid #333;border-radius:12px;padding:16px;overflow-y:auto;z-index:9999';
+    d.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:10px"><strong style="color:#aaa;font-size:13px">🔔 Mitteilungen</strong><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#666;cursor:pointer">✕</button></div>' + (h || '<div style="color:#555;font-size:13px">Keine Mitteilungen</div>');
+    document.body.appendChild(d);
+}
+
 function showNoti() {
     if(!cNoti) return;
     cNoti.classList.add('active'); cNoti.classList.remove('minimized');
     let rb = document.getElementById('restore-btn');
     if(rb) rb.classList.remove('visible');
+    // Record notification
+    let nt = cNoti.querySelector('.noti-title');
+    let nd = cNoti.querySelector('.noti-desc');
+    if(nt && nd) addNotiHistory(nt.textContent, nd.textContent);
     resetNH();
+    playSound('notification');
 }
 
 function hideNoti() {
@@ -1478,6 +1578,36 @@ if(cNoti) {
         if(aMedia) aMedia.pause();
         hideNoti();
     };
+    
+    // Volume slider
+    let vs = document.getElementById('volume-slider');
+    if(vs) vs.oninput = function() { if(aMedia) aMedia.volume = parseFloat(this.value); };
+    
+    // EQ toggle
+    document.getElementById('eq-toggle')?.addEventListener('click', function() {
+        let ep = document.getElementById('eq-panel');
+        ep.style.display = ep.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    // EQ bands
+    document.querySelectorAll('.eq-band').forEach(function(el) {
+        el.addEventListener('input', function() {
+            if(!aMedia || !aMedia.audioContext) return;
+            var freq = parseInt(this.dataset.freq);
+            var gain = parseFloat(this.value);
+            try { aMedia.audioContext.eqBands[freq].gain.value = gain; } catch(e) {}
+        });
+    });
+    
+    // Playlist toggle
+    document.getElementById('playlist-toggle')?.addEventListener('click', function() {
+        var pp = document.getElementById('playlist-panel');
+        pp.style.display = pp.style.display === 'none' ? 'block' : 'none';
+    });
+    
+    // Playlist queue
+    var playlistQueue = [];
+    document.getElementById('playlist-queue') && renderPlaylist();
 }
 
 setInterval(function() {
@@ -1527,6 +1657,41 @@ function setupM() {
     let pp = document.getElementById('play-pause');
     if(pp) pp.onclick = function() { aMedia.paused ? aMedia.play() : aMedia.pause(); resetNH(); };
     
+    // Update volume slider to match aMedia volume
+    let vs = document.getElementById('volume-slider');
+    if(vs) vs.value = aMedia.volume;
+    
+    // Try to set up EQ context on media element
+    if(!aMedia.audioContext) {
+        try {
+            var AC = window.AudioContext || window.webkitAudioContext;
+            if(AC && aMedia instanceof HTMLMediaElement) {
+                aMedia.audioContext = new AC();
+                aMedia.eqSource = aMedia.audioContext.createMediaElementSource(aMedia);
+                aMedia.eqBands = {};
+                [60, 250, 1000, 4000, 16000].forEach(function(f) {
+                    var band = aMedia.audioContext.createBiquadFilter();
+                    band.type = 'peaking';
+                    band.frequency.value = f;
+                    band.Q.value = 1;
+                    band.gain.value = 0;
+                    aMedia.eqBands[f] = band;
+                });
+                var freqs = [60, 250, 1000, 4000, 16000];
+                aMedia.eqSource.connect(aMedia.eqBands[freqs[0]]);
+                for(var ei=1; ei<freqs.length; ei++) aMedia.eqBands[freqs[ei-1]].connect(aMedia.eqBands[freqs[ei]]);
+                aMedia.eqBands[freqs[freqs.length-1]].connect(aMedia.audioContext.destination);
+            }
+        } catch(e) {}
+    }
+    
+    // Add to playlist queue if not already there
+    var src = aMedia.currentSrc || aMedia.src || '';
+    if(src && !playlistQueue.some(function(t){ return t.url === src; })) {
+        playlistQueue.push({url: src, title: aMedia.title || src.split('/').pop() || 'Track'});
+        renderPlaylist();
+    }
+    
     aMedia.addEventListener('play', function() {
         let iPl = document.getElementById('icon-play');
         let iPa = document.getElementById('icon-pause');
@@ -1564,6 +1729,40 @@ function fmtT(s) {
     let m = Math.floor(s / 60);
     let se = Math.floor(s % 60);
     return m + ":" + se.toString().padStart(2, '0');
+}
+
+/* ─── Playlist ─── */
+var playlistQueue = [];
+var currentTrackIdx = -1;
+function renderPlaylist() {
+    var el = document.getElementById('playlist-queue');
+    if(!el) return;
+    if(!playlistQueue.length) { el.innerHTML = '<div style="color:#444;padding:4px 0">Keine Tracks</div>'; return; }
+    el.innerHTML = '';
+    playlistQueue.forEach(function(t, i) {
+        var d = document.createElement('div');
+        d.style.cssText = 'display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #1a1a1a;cursor:pointer';
+        d.innerHTML = '<span style="color:' + (i === currentTrackIdx ? '#69db7c' : '#666') + ';font-size:10px">' + (i + 1) + '.</span><span style="flex:1;font-size:11px;color:' + (i === currentTrackIdx ? '#69db7c' : '#888') + '">' + t.title + '</span><span class="del-queue" style="color:#555;font-size:10px;cursor:pointer">✕</span>';
+        d.querySelector('.del-queue').onclick = function(e) { e.stopPropagation(); playlistQueue.splice(i, 1); if(i <= currentTrackIdx) currentTrackIdx--; renderPlaylist(); };
+        d.onclick = function() { playTrack(i); };
+        el.appendChild(d);
+    });
+}
+function playTrack(idx) {
+    if(idx < 0 || idx >= playlistQueue.length) return;
+    currentTrackIdx = idx;
+    var t = playlistQueue[idx];
+    if(!t.url) return;
+    // Try to play in existing media element or create new one
+    if(aMedia && aMedia.src !== t.url) {
+        try { aMedia.src = t.url; aMedia.play(); } catch(e) {}
+    }
+    renderPlaylist();
+}
+function addToPlaylist(title, url) {
+    if(!url || playlistQueue.some(function(t){ return t.url === url; })) return;
+    playlistQueue.push({title: title, url: url});
+    renderPlaylist();
 }
 
 function drawFV() {
@@ -1638,3 +1837,160 @@ function chkFps() {
     requestAnimationFrame(chkFps);
 }
 requestAnimationFrame(chkFps);
+
+/* ─── System Sounds ─── */
+var audioCtxSys = null;
+function playSound(type) {
+    try {
+        if(!audioCtxSys) audioCtxSys = new (window.AudioContext || window.webkitAudioContext)();
+        var osc = audioCtxSys.createOscillator();
+        var gain = audioCtxSys.createGain();
+        osc.connect(gain); gain.connect(audioCtxSys.destination);
+        gain.gain.value = 0.08;
+        if(type === 'notification') { osc.frequency.value = 800; osc.type = 'sine'; osc.start(); osc.stop(audioCtxSys.currentTime + 0.1); }
+        else if(type === 'open') { osc.frequency.value = 600; osc.type = 'triangle'; osc.start(); osc.stop(audioCtxSys.currentTime + 0.08); }
+        else if(type === 'close') { osc.frequency.setValueAtTime(500, audioCtxSys.currentTime); osc.frequency.linearRampToValueAtTime(200, audioCtxSys.currentTime + 0.1); osc.type = 'sine'; osc.start(); osc.stop(audioCtxSys.currentTime + 0.12); }
+        else if(type === 'boot') { osc.frequency.setValueAtTime(200, audioCtxSys.currentTime); osc.frequency.linearRampToValueAtTime(800, audioCtxSys.currentTime + 0.3); osc.type = 'sine'; osc.start(); osc.stop(audioCtxSys.currentTime + 0.35); }
+    } catch(e) {}
+}
+
+/* ─── Screensaver ─── */
+var ssTimer = null;
+var ssActive = false;
+function resetSsTimer() {
+    if(ssActive) return;
+    clearTimeout(ssTimer);
+    ssTimer = setTimeout(function() {
+        ssActive = true;
+        var ss = document.getElementById('screensaver');
+        if(ss) { ss.style.display = 'flex'; setTimeout(function(){ ss.classList.add('active'); }, 50); }
+    }, parseInt(localStorage.getItem('ss_timeout') || '300000'));
+}
+document.addEventListener('mousemove', resetSsTimer);
+document.addEventListener('keydown', resetSsTimer);
+document.addEventListener('click', function() {
+    if(ssActive) {
+        ssActive = false;
+        var ss = document.getElementById('screensaver');
+        if(ss) { ss.classList.remove('active'); setTimeout(function(){ ss.style.display = 'none'; }, 600); }
+        resetSsTimer();
+    }
+});
+resetSsTimer();
+
+// Add screensaver element if not exists
+(function() {
+    if(!document.getElementById('screensaver')) {
+        var ss = document.createElement('div');
+        ss.id = 'screensaver';
+        ss.style.cssText = 'position:fixed;inset:0;z-index:80000;background:#000;display:none;align-items:center;justify-content:center;transition:opacity .6s;opacity:0;cursor:none';
+        ss.innerHTML = '<div style="font-size:4rem;font-weight:200;color:#1a1a1a;letter-spacing:10px;animation:ssFloat 20s ease-in-out infinite">DanTe-OS</div><style>@keyframes ssFloat{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}</style>';
+        document.body.appendChild(ss);
+    }
+})();
+
+/* ─── Wallpaper Shuffle ─── */
+var wpShuffleInterval = null;
+var wpList = [];
+var allWp = document.querySelectorAll('#wallpaper-selector option');
+for(var wi=0; wi<allWp.length; wi++) wpList.push(allWp[wi].value);
+if(wpList.length === 0) wpList = ['default.mp4','Matrix.mp4','aurora.mp4','blue.mp4','Candy.mp4','Cherry.mp4','Cyber.mp4','Cyberpunk.mp4','Dark2.mp4','Dark.mp4','Flame.mp4','forest.mp4','Galaxy.mp4','Hacker.mp4','Matrix.mp4','Moon.mp4','Nebula.mp4','Neon2.mp4','Neon.mp4','Night.mp4','Ocean.mp4','rain.mp4','Rainbow.mp4','Red.mp4','Retro.mp4','rising.mp4','Sky.mp4','Snow.mp4','Space.mp4','Sunset.mp4','Tokyo.mp4','Trippy.mp4','Tron.mp4','Vaporwave.mp4','Water.mp4'];
+function startWpShuffle() {
+    stopWpShuffle();
+    wpShuffleInterval = setInterval(function() {
+        var rnd = wpList[Math.floor(Math.random() * wpList.length)];
+        if(window.setWallpaper) setWallpaper(rnd, true);
+    }, parseInt(localStorage.getItem('wp_shuffle_interval') || '60000'));
+}
+function stopWpShuffle() { clearInterval(wpShuffleInterval); }
+// Check config on load
+if(localStorage.getItem('wp_shuffle') === 'true') startWpShuffle();
+
+/* ─── Search History ─── */
+var searchHistory = JSON.parse(localStorage.getItem('search_history') || '[]');
+function addSearch(q) {
+    if(!q) return;
+    var idx = searchHistory.indexOf(q);
+    if(idx > -1) searchHistory.splice(idx, 1);
+    searchHistory.unshift(q);
+    if(searchHistory.length > 5) searchHistory.length = 5;
+    localStorage.setItem('search_history', JSON.stringify(searchHistory));
+    renderSearchHistory();
+}
+function renderSearchHistory() {
+    var sh = document.getElementById('search-history');
+    if(!sh) return;
+    sh.innerHTML = '';
+    searchHistory.forEach(function(q) {
+        var d = document.createElement('div');
+        d.style.cssText = 'padding:4px 8px;font-size:12px;color:#666;cursor:pointer;border-radius:4px';
+        d.textContent = '🕐 ' + q;
+        d.onclick = function() {
+            var inp = document.getElementById('start-search-input');
+            if(inp) { inp.value = q; inp.focus(); }
+        };
+        d.onmouseenter = function(){ this.style.background = '#1a1a1a'; };
+        d.onmouseleave = function(){ this.style.background = 'transparent'; };
+        sh.appendChild(d);
+    });
+}
+// Hook into existing search
+var origSearchKeydown = document.getElementById('start-search-input');
+if(origSearchKeydown) {
+    var oldHandler = origSearchKeydown.onkeydown;
+    origSearchKeydown.addEventListener('keydown', function(e) {
+        if(e.key === 'Enter') {
+            var q = this.value.trim();
+            if(q && wallpaperRegistry && wallpaperRegistry[q]) addSearch(q);
+        }
+    });
+}
+
+/* ─── Multiple Desktops ─── */
+var currentDesktop = 0;
+var totalDesktops = 3;
+var desktopNames = ['Desk 1', 'Desk 2', 'Desk 3'];
+var winDesktops = {}; // id -> desktop index
+function switchDesktop(idx) {
+    if(idx < 0 || idx >= totalDesktops || idx === currentDesktop) return;
+    currentDesktop = idx;
+    // Hide/show windows based on desktop
+    var wins = document.querySelectorAll('.window');
+    wins.forEach(function(w) {
+        var id = w.id.replace('win-', '');
+        var wd = winDesktops[id] || 0;
+        w.style.display = wd === idx ? '' : 'none';
+    });
+    var dots = document.querySelectorAll('.desk-dot');
+    for(var di=0; di<dots.length; di++) dots[di].classList.toggle('active', di === idx);
+    var diEl = document.getElementById('desk-indicator');
+    if(diEl) diEl.textContent = desktopNames[idx];
+}
+// Assign new windows to current desktop
+var origOpenWindow = openWindow;
+openWindow = function(id) {
+    origOpenWindow(id);
+    winDesktops[id] = currentDesktop;
+};
+// Add desktop switcher to dock
+(function() {
+    var dock = document.getElementById('dock');
+    if(!dock) return;
+    var di = document.createElement('div');
+    di.id = 'desk-indicator';
+    di.style.cssText = 'display:flex;align-items:center;gap:4px;margin-left:6px;cursor:pointer;color:#666;font-size:10px;white-space:nowrap';
+    di.textContent = desktopNames[0];
+    di.onclick = function() { switchDesktop((currentDesktop + 1) % totalDesktops); };
+    var dd = document.createElement('div');
+    dd.style.cssText = 'display:flex;gap:3px;margin-left:6px';
+    for(var i=0; i<totalDesktops; i++) {
+        var dot = document.createElement('div');
+        dot.className = 'desk-dot' + (i===0?' active':'');
+        dot.style.cssText = 'width:5px;height:5px;border-radius:50%;background:#333;transition:.2s;cursor:pointer';
+        dot.onclick = function(j) { return function(){ switchDesktop(j); }; }(i);
+        dd.appendChild(dot);
+    }
+    var lastSep = dock.querySelector('.dock-sep:last-child');
+    if(lastSep) { lastSep.after(di); di.after(dd); }
+    else { dock.appendChild(di); dock.appendChild(dd); }
+})();

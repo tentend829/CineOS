@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Datei-Manager</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+#path-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#1a1a1a;border-bottom:1px solid #333}
+#path-bar span{color:#888;font-size:13px;font-weight:600}
+#path-bar #path{color:#aaa;font-size:13px}
+#list{flex:1;overflow-y:auto;padding:8px}
+.item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer;transition:.1s}
+.item:hover{background:#1a1a1a}
+.item .icon{font-size:20px;width:28px;text-align:center}
+.item .name{flex:1;font-size:14px}
+.item .size{color:#666;font-size:12px}
+.folder{color:#74c0fc}
+.file{color:#ccc}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+</style></head><body>
+<div id="path-bar"><span>📁</span><span id="path">/</span></div>
+<div id="list"></div>
+<script>
+const list=document.getElementById('list'),pathEl=document.getElementById('path');
+let history=['/'],histIdx=0;
+const FILES={'/':{'Apps':'📁','Videos':'📁','script.js':'📄','style.css':'📄','index.html':'📄','vercel.json':'📄'},'/Apps':{'Cine':'📁','Ps5':'📁','Calculator':'📁','Notes':'📁','Snake':'📁','Terminal':'📁','Paint':'📁','Kalender':'📁','Tetris':'📁','TicTacToe':'📁','Memory':'📁','StickyNotes':'📁','AudioRecorder':'📁','PDFViewer':'📁','FileManager':'📁'}};
+function ensureDir(p){if(!FILES[p]){FILES[p]={};let parts=p.split('/').filter(Boolean);let parent='/';for(let i=0;i<parts.length;i++){parent+=(i>0?'/':'')+parts[i];if(!FILES[parent])FILES[parent]={}}}}
+function render(){let p=history[histIdx];pathEl.textContent=p;list.innerHTML='';
+ensureDir(p);let entries=FILES[p];if(p!=='/'){let up=document.createElement('div');up.className='item';
+up.innerHTML='<span class="icon">📂</span><span class="name" style="color:#888">..</span><span class="size"></span>';
+up.onclick=()=>{let pp=p.split('/');pp.pop();go(pp.join('/')||'/')};list.appendChild(up)}
+Object.keys(entries).sort().forEach(n=>{let type=entries[n];let isDir=type==='📁';let d=document.createElement('div');d.className='item';
+d.innerHTML='<span class="icon">'+(isDir?'📁':'📄')+'</span><span class="name '+(isDir?'folder':'file')+'">'+n+'</span><span class="size">'+(isDir?'':'0 KB')+'</span>';
+if(isDir)d.onclick=()=>{let np=p+(p.endsWith('/')?'':'/')+n;ensureDir(np);go(np)};
+list.appendChild(d)})}
+function go(np){if(histIdx<history.length-1)history=history.slice(0,histIdx+1);history.push(np);histIdx++;render()}
+render();
+</script></body></html>

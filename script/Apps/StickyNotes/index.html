@@ -1,0 +1,29 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Sticky Notes</title><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#111;color:#fff;font-family:'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+#bar{display:flex;padding:8px 12px;gap:8px;background:#1a1a1a;border-bottom:1px solid #333}
+#bar button{padding:6px 14px;background:#333;border:1px solid #555;color:#fff;border-radius:6px;cursor:pointer;font-size:13px}
+#bar button:hover{background:#444}
+#grid{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:16px;overflow-y:auto;align-content:start}
+.note{background:#2a2a1a;border:1px solid #444;border-radius:10px;padding:12px;min-height:120px;display:flex;flex-direction:column;position:relative}
+.note textarea{background:transparent;border:none;color:#ddd;font-family:'Segoe UI',sans-serif;font-size:13px;resize:none;flex:1;outline:none;min-height:80px;line-height:1.5}
+.note .del{position:absolute;top:6px;right:8px;background:none;border:none;color:#666;cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px}
+.note .del:hover{background:#3a2a2a;color:#f66}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+</style></head><body>
+<div id="bar"><button id="add">+ Neue Notiz</button><button id="colors">🎨 Farben</button></div>
+<div id="grid"></div>
+<script>
+const grid=document.getElementById('grid'),colors=['#2a2a1a','#1a2a2a','#2a1a2a','#1a1a2a','#2a2a2a'];
+let ci=0,notes=JSON.parse(localStorage.getItem('stickynotes')||'[]');
+function save(){localStorage.setItem('stickynotes',JSON.stringify(notes))}
+function render(){grid.innerHTML='';notes.forEach((n,i)=>{let d=document.createElement('div');d.className='note';d.style.background=n.c||colors[0];
+let del=document.createElement('button');del.className='del';del.textContent='✕';del.onclick=()=>{notes.splice(i,1);save();render()};
+let ta=document.createElement('textarea');ta.value=n.t||'';ta.placeholder='Notiz...';ta.oninput=()=>{n.t=ta.value;save()};
+d.append(del,ta);grid.appendChild(d)})}
+document.getElementById('add').onclick=()=>{notes.push({t:'',c:colors[ci%colors.length]});ci++;save();render();setTimeout(()=>{let ta=grid.lastChild.querySelector('textarea');if(ta){ta.focus()}},50)};
+document.getElementById('colors').onclick=()=>{let n=notes.length;if(!n)return;notes[n-1].c=colors[++ci%colors.length];save();render()};
+render();
+</script></body></html>
