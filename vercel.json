@@ -5,6 +5,7 @@
   "framework": null,
   "routes": [
     { "src": "/404", "dest": "/404.html" },
+    { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
