@@ -243,36 +243,13 @@ document.addEventListener('keydown', function(e) {
 });
 
 function startBootSequence() {
-    let cb = document.getElementById('boot-content');
-    let bv = document.getElementById('boot-video');
-    cb.style.display = 'none';
-    bv.style.display = 'block';
-    bv.muted = false;
-    bv.volume = 1.0;
-    
-    if(sysConfig.shortBoot) {
-        bv.src = "Videos/QuickBoot.mp4";
-        bv.load();
-    }
-    
-    let p = bv.play();
-    if(p !== undefined) {
-        p.catch(function() {
-            bv.muted = true;
-            bv.play();
-        });
-    }
-    bv.onended = function() {
-        if(bootActive) skipBootSequence();
-    };
+    skipBootSequence();
 }
 
 function skipBootSequence() {
     if(!bootActive) return;
     bootActive = false;
     let lay = document.getElementById('boot-layer');
-    let bv = document.getElementById('boot-video');
-    if(bv) bv.pause();
     
     if(lay) {
         lay.style.opacity = '0';
@@ -1238,7 +1215,7 @@ setInterval(function() {
     let md = document.querySelectorAll('audio, video');
     for(let i=0; i<md.length; i++) {
         let m = md[i];
-        if(!m.paused && !m.muted && m.volume > 0 && !['bg-video', 'lock-video', 'boot-video'].includes(m.id)) fnd = m;
+        if(!m.paused && !m.muted && m.volume > 0 && !['bg-video', 'lock-video'].includes(m.id)) fnd = m;
     }
     
     let ifr = document.querySelectorAll('iframe');
