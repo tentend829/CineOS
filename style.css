@@ -710,9 +710,9 @@ details.thought-process summary::before { content: "🧠"; font-size: 15px; }
 #restore-btn.visible { transform: translateX(0); }
 #restore-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
-#cine-noti { position: fixed; bottom: 24px; right: 24px; width: 320px; background: #111; border: 1px solid #333; border-radius: 20px; padding: 16px; box-shadow: 0 24px 48px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.05); color: #fff; transform: translateY(150%) scale(0.9); opacity: 0; transition: transform 0.6s cubic-bezier(0.2,0.8,0.2,1), opacity 0.5s ease; z-index: var(--z-noti); display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
-#cine-noti.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
-#cine-noti.minimized { transform: translateX(150%) scale(0.9); opacity: 0; pointer-events: none; }
+#dante-noti { position: fixed; bottom: 24px; right: 24px; width: 320px; background: #111; border: 1px solid #333; border-radius: 20px; padding: 16px; box-shadow: 0 24px 48px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.05); color: #fff; transform: translateY(150%) scale(0.9); opacity: 0; transition: transform 0.6s cubic-bezier(0.2,0.8,0.2,1), opacity 0.5s ease; z-index: var(--z-noti); display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
+#dante-noti.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
+#dante-noti.minimized { transform: translateX(150%) scale(0.9); opacity: 0; pointer-events: none; }
 .window-actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: -4px; }
 .action-btn { background: #222; border: 1px solid #444; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #888; transition: all 0.2s ease; }
 .action-btn:hover { background: #fff; color: #000; }

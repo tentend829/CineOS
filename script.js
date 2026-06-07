@@ -1,11 +1,11 @@
-var _SYSTEM_PATHS = ["C:/Windows/System32/kernel32.dll", "/var/www/html/cine-os/", "https://cine-os.local/api/v1/auth"];
+var _SYSTEM_PATHS = ["C:/Windows/System32/kernel32.dll", "/var/www/html/dante-os/", "https://dante-os.local/api/v1/auth"];
 var _devBuildVer = "3.0.1";
 
 var APPS = {
-    'cine': {title: 'CINE // HUB', path: 'script/Apps/Cine/index.html', icon: 'https://cdn.worldvectorlogo.com/logos/netflix-logo-icon.svg', pinned: true},
+    'cine': {title: 'DANTE // HUB', path: 'script/Apps/Cine/index.html', icon: 'https://cdn.worldvectorlogo.com/logos/netflix-logo-icon.svg', pinned: true},
     'term': {title: 'Spotify', path: 'script/Apps/Spotify/index.html', icon: 'https://cdn.pixabay.com/photo/2016/10/22/00/15/spotify-1759471_1280.jpg', pinned: true},
     'files': {title: 'PS5 Emu', path: 'script/Apps/Ps5/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-OeL_be7RFaoHi3PswkuAR5XcMgBNRDynsg&s', pinned: true},
-    'web': {title: 'Cine-Web', path: 'script/Apps/Web/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeD89ZcX5W1FBtal7RerasT27q-OmZqnBixQ&s', pinned: true},
+    'web': {title: 'DanTe-Web', path: 'script/Apps/Web/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeD89ZcX5W1FBtal7RerasT27q-OmZqnBixQ&s', pinned: true},
     'settings': {title: 'CONFIG', internal: true, icon: 'https://cdn.iconscout.com/icon/free/png-256/free-apple-settings-icon-svg-download-png-493162.png', pinned: true},
     'discord': {title: 'Discord', path: 'script/Apps/Discord/index.html', icon: 'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png', pinned: false},
     'roblox': {title: 'Roblox', path: 'script/Apps/Roblox/index.html', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9KvNyFWMg_bjo_q_1IVLKFWbfCeonn2qDow&s', pinned: false},
@@ -38,7 +38,7 @@ var wallpaperRegistry = {
     "green": {id: "green", name: "Green Anime", url: "Videos/green.mp4", locked: false},
     "33A56": {id: "hunt_trait", name: "Hunt Showdown", url: "Videos/33A56.mp4", locked: true},
     "45E33": {id: "45E33", name: "45E33", url: "Videos/45E33.mp4", locked: false},
-    "55Cine": {id: "55Cine", name: "Cine 55", url: "Videos/55Cine.PNG", locked: false},
+    "55Cine": {id: "55Cine", name: "DanTe 55", url: "Videos/55Cine.PNG", locked: false},
     "99Med": {id: "99Med", name: "99 Med", url: "Videos/99Med.mp4", locked: false},
     "Brother": {id: "Brother", name: "Brother", url: "Videos/Brother.mp4", locked: false},
     "F-1": {id: "F-1", name: "F-1 Formula", url: "Videos/F-1.mp4", locked: false},
@@ -80,7 +80,7 @@ window.updateSysSetting = function(key, value) {
 };
 
 var cloaks = {
-    none: {title: "Cine-OS", icon: ""},
+    none: {title: "DanTe-OS", icon: ""},
     google: {title: "Google", icon: "https://www.google.com/favicon.ico"},
     drive: {title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png"},
     canvas: {title: "Dashboard", icon: "https://du11hjcvx0uqb.cloudfront.net/br/dist/images/favicon-e10d657a73.ico"},
@@ -107,7 +107,7 @@ function applyCloak() {
         n.href = sel.icon;
         document.getElementsByTagName('head')[0].appendChild(n);
     } else {
-        document.title = "Cine-OS";
+        document.title = "DanTe-OS";
     }
 }
 setInterval(applyCloak, 2000);
@@ -317,7 +317,7 @@ window.unlockSystem = function() {
             if(bV.style.display !== 'none') bV.play().catch(function(e){});
         }
         if(!welcomeShown) {
-            showNotification("Welcome To Cine V2", "Checkout Settings for FAQ!");
+            showNotification("Welcome To DanTe V2", "Checkout Settings for FAQ!");
             welcomeShown = true;
         }
     }, 600);
@@ -576,7 +576,7 @@ function openWindow(id) {
                     <div class="setting-card">
                         <div class="setting-text"><b>Tab Cloaking</b><small>Disguises OS as another site</small></div>
                         <select id="cloak-select" onchange="window.parent.updateCloak(this.value)">
-                            <option value="none">None (Cine-OS)</option>
+                            <option value="none">None (DanTe-OS)</option>
                             <option value="google">Google</option>
                             <option value="drive">Google Drive</option>
                             <option value="canvas">Canvas</option>
@@ -1184,7 +1184,7 @@ window.closeCiri = function() {
 
 var aMedia = null;
 var nHide;
-var cNoti = document.getElementById('cine-noti');
+var cNoti = document.getElementById('dante-noti');
 
 function showNoti() {
     if(!cNoti) return;
